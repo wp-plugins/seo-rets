@@ -79,17 +79,18 @@ Upgrade to get your custom lead popup working even better.
 
 == A brief Markdown Example ==
 
+
 **Features include:**
 
-* Basic Search*.
-* Advanced Search*.
-* Full Map Serch*.
-* Split Map Search*.
-* MLS ID search*.
-* Address Search*.
-* Search Refinement*.
-* Community Search*.
-* Search by Schools	*.
+* Basic Search
+* Advanced Search
+* Full Map Serch
+* Split Map Search
+* MLS ID search
+* Address Search
+* Search Refinement
+* Community Search
+* Search by Schools	
 
 SEO Friendly:
 
