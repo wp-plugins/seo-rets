@@ -33,12 +33,10 @@ No, SEORETS is a month to month agreement only.  With monthly plans starting at 
 What can I expect if I choose SEORETS as my  RETS/IDX feed provider?
 Upon installing the SEORETS plugin you will see a link to sign up for a license key.  This link takes you to a form to enter you details and subscription payment method.  Upon receiving the sign up SEORETS, LLC will send you the necessary MLS paperwork (If required).  Once you sign the MLS paperwork you will need to fax or email it back to us and we will forward the paperwork to the MLS for approval.  Approval can take between 2-10 days on average.  Once approved we will send you a license key to activate the plugin.
 
-= How to add auto-generated area page ?=
-
+= How to add auto-generated area page ? =
 You can add auto-generated area page with help of [sr-list type="res" object="subdivision"] or [sr-list type="res" object="subdivision"].
 
-= How can I create page with market statistics ?=
-
+= How can I create page with market statistics ? =
 You can create page with market statistics with help of [sr-market] shortcode.
 
 == Screenshots ==
