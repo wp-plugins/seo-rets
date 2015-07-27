@@ -48,20 +48,20 @@ You can create page with market statistics with help of [sr-market] shortcode.
 == Changelog ==
 
 = 3.3.32 =
-*removed order seo content page
-*opened the plugin code
+* removed order seo content page
+* opened the plugin code
 
 = 3.3.30 =
-*fixed critical bug in shortcodes parameters.
+* fixed critical bug in shortcodes parameters.
 
 = 3.3.29 =
-*recovered [sr-leadcapture] shortcode. It generates basic contact form.
-*fixed search request structure.
-*added new map search shortcode [sr-splitsearch].
-*now you can send plugin emails in two ways through wordpress mail function and php one.
+* recovered [sr-leadcapture] shortcode. It generates basic contact form.
+* fixed search request structure.
+* added new map search shortcode [sr-splitsearch].
+* now you can send plugin emails in two ways through wordpress mail function and php one.
 
 = 3.3.28 =
-*fixed custom lead popup issue.
+* fixed custom lead popup issue.
 
 == Upgrade Notice ==
 
