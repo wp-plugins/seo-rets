@@ -106,7 +106,7 @@ Upgrade to get your custom lead popup working even better.
 
 **WordPress:**
 
-* All Administration is done in WordPress – No Wrappers
+* All Administration is done in WordPress - No Wrappers
 * Not external platforms for management making it very wordPress Plugin compatible
 * IDX Plugin is included
 * WordPress Plugin's code is open for customization
@@ -130,14 +130,14 @@ Upgrade to get your custom lead popup working even better.
 * Set how many properties viewed before lead capture pops up
 * Customize Lead Capture Fields
 * Contact Page
-* Inline Property Info Request – Gets 8X more leads than sidebar
+* Inline Property Info Request - Gets 8X more leads than sidebar
 * Schedule A Showing Call to Action
 * Save to Favorites Lead capture
 * New Listing Alerts Lead Capture
 * Captcha Spam Protection
 * New Lead Email or Text Notifications
 * Referral Data Showing Last 10 Properties Viewed
-* Downloadible PDFs for Every Listing – QR Coded Your Brand and Number
+* Downloadible PDFs for Every Listing - QR Coded Your Brand and Number
 * Email Listing to Friend (Captures to and from emails)
 * Leads are saved to database for easy viewing via Plugin
 * Export leads in execl, CSV formats
@@ -157,7 +157,7 @@ Upgrade to get your custom lead popup working even better.
 
 **Optimized for Mobile Devices:**
 
-* Responsive templates – Conforms to your theme
+* Responsive templates - Conforms to your theme
 * Mobile CSS
 * Search for Properties on tablets and phones
 * No wrappers to match
