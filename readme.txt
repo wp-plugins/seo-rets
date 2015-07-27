@@ -84,7 +84,7 @@ Upgrade to get your custom lead popup working even better.
 
 * Basic Search
 * Advanced Search
-* Full Map Serch
+* Full Map Search
 * Split Map Search
 * MLS ID search
 * Address Search
