@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: SEO RETS
+Plugin Name: SEO RETS IDX Plugin for Real Estate
 Plugin URI: http://seorets.com
 Description: Convert your RETS/IDX feed into an SEO friendly real estate portal
 Version: 3.3.36
