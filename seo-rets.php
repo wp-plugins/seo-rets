@@ -1820,9 +1820,10 @@ END SESSION STUFF
 			$errors[] = 'PHP Version > 5.2.0 Required';
 		}
 
-		if ( get_option( 'permalink_structure' ) != "/%postname%" ) {
-			$errors[] = 'You must set your permalink structure to "/%postname%"';
+		if (get_option('permalink_structure') != "/%postname%" && get_option('permalink_structure') != "/%postname%/") {
+			$errors[] = 'You must set your permalink structure to "/%postname%" or "/%postname%/"';
 		}
+
 
 		return $errors;
 	}
