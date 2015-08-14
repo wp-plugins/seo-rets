@@ -25,7 +25,7 @@ $sr = $seo_rets_plugin;
 							Thank you for your interest in the SEO RETS WordPress plugin.
 						</p>
 						<p>
-							Before you can get started, you will need to enter the license key you received. Need to get a license key? One can be purchased <a href="http://seorets.com/purchase">here</a>
+							Before you can get started, you will need to enter the license key you received. Need to get a license key? One can be purchased <a href="http://seorets.com/getting-started/">here</a>
 						</p>
 						<p>
 							<form action="" method="post">
@@ -80,7 +80,7 @@ else:
 							Before you can get started, you will need to enter the license key you received.
 						</p>
 						<p>
-							Need a license key? One can be purchased <a href="http://seorets.com/purchase">here</a>.
+							Need a license key? One can be purchased <a href="http://seorets.com/getting-started/">here</a>.
 						</p>
 							<?php if ($errors): ?>
 							<p style="color:red;">
@@ -102,7 +102,7 @@ else:
 												<label for="key">License Key:</label>
 											</th>
 											<td>
-												<input type="text" name="key" id="key" class="regular-text"<?php echo  $errors ? ' disabled="disabled"' : "" ?> value="DEMO-DEMO-DEMO-DEMO" /><br />
+												<input type="text" name="key" id="key" class="regular-text"<?php echo  $errors ? ' disabled="disabled"' : "" ?> value="" /><br />
 												<span class="description">Note: You can only register your license on one server.</span>
 											</td>
 										</tr>
