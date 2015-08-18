@@ -3,7 +3,7 @@
 Plugin Name: SEO RETS
 Plugin URI: http://seorets.com
 Description: Convert your RETS/IDX feed into an SEO friendly real estate portal
-Version: 3.3.38
+Version: 3.3.39
 Author: SEO RETS, LLC
 Author URI: http://seorets.com
 */
@@ -99,25 +99,53 @@ class SEO_RETS_Plugin {
 		}
 
 // Things that will happen regardless of the type of page that was requested
-		$enqueue_scripts = create_function( '', "
+		$enqueue_scripts = create_function('', "
 // This css contains all of the rules for any html the plugin outputs
 wp_register_style('sr-css', '/sr-css');
 wp_enqueue_style('sr-css');
 wp_register_style('sr-contact', '{$this->plugin_dir}resources/css/contact.css');
 wp_enqueue_style('sr-contact');
-		wp_register_style('sr-magnific-popup', '{$this->plugin_dir}resources/css/magnific-popup.css');
+
+wp_register_style('sr-bootstrap-css', '{$this->plugin_dir}resources/bootstrap/css/bootstrap.min.css');
+wp_register_style('sr-bootstrap-theme-css', '{$this->plugin_dir}resources/bootstrap/css/bootstrap-theme.min.css');
+wp_register_script('sr-bootstrap-js', '{$this->plugin_dir}resources/bootstrap/js/bootstrap.min.js', array('jquery'));
+
+wp_enqueue_style('sr-bootstrap-css');
+wp_enqueue_style('sr-bootstrap-theme-css');
+wp_enqueue_script('sr-bootstrap-js');
+
+wp_register_style('sr-mp-css', '{$this->plugin_dir}resources/css/mp-style.css');
+wp_enqueue_style('sr-mp-css');
+
+wp_register_style('sr-magnific-popup', '{$this->plugin_dir}resources/css/magnific-popup.css');
+wp_register_script('sr-magnific-popup', '{$this->plugin_dir}resources/js/jquery.magnific-popup.min.js', array('jquery'));
+wp_enqueue_style('sr-magnific-popup');
+wp_enqueue_script('sr-magnific-popup');
+//
+wp_register_script('sr-lazyload', '{$this->plugin_dir}resources/js/jquery.lazyload.min.js', array('jquery'));
+wp_enqueue_script('sr-lazyload');
+
+
+
+
+wp_enqueue_script('jquery');
+");
+		$enqueue_scripts_admin = create_function('', "
+// This css contains all of the rules for any html the plugin outputs
+wp_register_style('sr-css', '/sr-css');
+wp_enqueue_style('sr-css');
+wp_register_style('sr-contact', '{$this->plugin_dir}resources/css/contact.css');
+wp_enqueue_style('sr-contact');
+wp_register_style('sr-magnific-popup', '{$this->plugin_dir}resources/css/magnific-popup.css');
 wp_register_script('sr-magnific-popup', '{$this->plugin_dir}resources/js/jquery.magnific-popup.min.js', array('jquery'));
 wp_enqueue_style('sr-magnific-popup');
 wp_enqueue_script('sr-magnific-popup');
 
-wp_register_script('sr-lazyload', '{$this->plugin_dir}resources/js/jquery.lazyload.min.js', array('jquery'));
-wp_enqueue_script('sr-lazyload');
-
 wp_enqueue_script('jquery');
-" );
+");
 
-		add_action( 'wp_enqueue_scripts', $enqueue_scripts );
-		add_action( 'admin_enqueue_scripts', $enqueue_scripts );
+		add_action('wp_enqueue_scripts', $enqueue_scripts);
+		add_action('admin_enqueue_scripts', $enqueue_scripts_admin);
 
 		include( 'widgets/listings.php' );
 		include( 'widgets/search.php' );
@@ -250,6 +278,7 @@ $wp_rewrite->flush_rules();
 
 		$id  = - 1;
 		$id2 = - 1;
+//		$id3 = - 1;
 		if ( ! empty( $templatesList ) ) {
 			foreach ( $templatesList as $key => $template ) {
 				if ( $template['name'] == 'seo rets responsive template' ) {
@@ -258,6 +287,9 @@ $wp_rewrite->flush_rules();
 				if ( $template['name'] == 'seo rets responsive template2' ) {
 					$id2 = $key;
 				}
+//				if ( $template['name'] == 'seo rets responsive template3') {
+//					$id3 = $key;
+//				}
 			}
 		} elseif ( ! empty( $currentTemplate ) ) {
 			$templatesList[0]['name']      = 'original styles';
@@ -340,6 +372,36 @@ $wp_rewrite->flush_rules();
 			}
 
 		}
+//		if ( $id3 < 0 ) {
+//			if ( empty( $templatesList ) ) {
+//				$id3    = 0;
+//				$tempID = 0;
+//
+//			} else {
+//				$id3    = $key + 1;
+//				$tempID = $templatesList[ $key ]['id'] + 1;
+//			}
+//
+//			$templatesList[ $id3 ]['name'] = 'seo rets responsive template3';
+//			$templatesList[ $id3 ]['id']   = $tempID;
+//
+//			$responsiveResult3                             = file_get_contents( $this->server_plugin_dir . "/resources/defaults/template-responsive-result3.php" );
+//			$responsiveDetails3                            = file_get_contents( $this->server_plugin_dir . "/resources/defaults/template-responsive-details3.php" );
+//			$responsiveCssJs3                              = file_get_contents( $this->server_plugin_dir . "/resources/defaults/template-responsive-css-js3.php" );
+//			$templatesList[ $id3 ]['templates']['details'] = $responsiveDetails3;
+//			$templatesList[ $id3 ]['templates']['result']  = $responsiveResult3;
+//			$templatesList[ $id3 ]['templates']['css']     = $responsiveCssJs3;
+////
+//
+//			if ( $templatesList[ $id3 ]['default'] == 1 ) {
+//
+//				$currentTemplate['details'] = $responsiveDetails3;
+//				$currentTemplate['result']  = $responsiveResult3;
+//				$currentTemplate['css']     = $responsiveCssJs3;
+//				update_option( 'sr_templates', $currentTemplate );
+//			}
+//
+//		}
 
 //        if ($id>=0) {
 //

@@ -4,13 +4,20 @@
         <a class="sr-listing-det-buttons" href="<?php echo get_bloginfo('url')?>/sr-favorites?add=<?php echo $l->mls_id?>,<?php echo $type?>"><img src="<?php echo $sr->plugin_dir?>resources/images/save-to-favorites.png" /></a>
         <a class="sr-listing-det-buttons" href="javascript:void(0);" id="sr-alert"><img src="<?php echo $sr->plugin_dir?>resources/images/email-alerts.png" /></a>
         <br />
-        <a href="javascript:void(0);" id="main-photo-a"><img src="<?php echo $photo_dir?>/<?php echo $l->seo_url?>-<?php echo $l->mls_id?>-1.jpg" class="sr-listing-photo sr-listing-photo-details-main" alt="<?php echo htmlentities($l->address)?>, <?php echo htmlentities($l->city)?>, <?php echo htmlentities($l->state)?> <?php echo htmlentities($l->zip)?> - 1" title="<?php echo htmlentities($l->address)?>, <?php echo htmlentities($l->city)?>, <?php echo htmlentities($l->state)?> <?php echo htmlentities($l->zip)?> - 1" /></a>
-
-        <div class="sr-thumbs">
+        <div class="zoom-gallery">
+            <a title="<?= $l->subdivision ?> Real Estate - <?= htmlentities($l->address) ?>, <?= htmlentities($l->city) ?>, <?= htmlentities($l->state) ?> - <?= $n ?>" data-source="<?= $photo_dir ?>/<?= $l->seo_url ?>-<?= $l->mls_id ?>-1.jpg" href="<?= $photo_dir ?>/<?= $l->seo_url ?>-<?= $l->mls_id ?>-1.jpg" id="main-photo-a" style="padding-top:8px;"><img
+                    src="<?= $photo_dir ?>/<?= $l->seo_url ?>-<?= $l->mls_id ?>-1.jpg"
+                    class="img-responsive sr-listing-photo sr-listing-photo-details-main"
+                    alt="<?= $l->subdivision ?><?php if ($type == "cnd"): ?> Condos<?php elseif ($type == "lnds"): ?> Lots<?php else: ?> Homes<?php endif; ?> For Sale - <?= htmlentities($l->address) ?>, <?= htmlentities($l->city) ?>, <?= htmlentities($l->state) ?>  - 1"
+                    title="<?= $l->subdivision ?><?php if ($type == "cnd"): ?> Condos<?php elseif ($type == "lnds"): ?> Lots<?php else: ?> Homes<?php endif; ?> For Sale - <?= htmlentities($l->address) ?>, <?= htmlentities($l->city) ?>, <?= htmlentities($l->state) ?>  - 1"/></a>
             <?php
-            $n = 0;
-            while ( $n++ < $l->photos ): ?>
-                <a href="<?php echo $photo_dir?>/<?php echo $l->seo_url?>-<?php echo $l->mls_id?>-<?php echo $n?>.jpg"><img src="<?php echo $photo_dir?>/<?php echo $l->seo_url?>-<?php echo $l->mls_id?>-<?php echo $n?>.jpg" class="sr-listing-photo sr-listing-photo-details" alt="<?php echo htmlentities($l->address)?>, <?php echo htmlentities($l->city)?>, <?php echo htmlentities($l->state)?> <?php echo htmlentities($l->zip)?> - <?php echo $n?>" title="<?php echo htmlentities($l->address)?>, <?php echo htmlentities($l->city)?>, <?php echo htmlentities($l->state)?> <?php echo htmlentities($l->zip)?> - <?php echo $n?>" /></a>
+            $n = 1;
+            while ($n++ < $l->photos): ?>
+                <a title="<?= $l->subdivision ?> Real Estate - <?= htmlentities($l->address) ?>, <?= htmlentities($l->city) ?>, <?= htmlentities($l->state) ?> - <?= $n ?>" data-source="<?= $photo_dir ?>/<?= $l->seo_url ?>-<?= $l->mls_id ?>-<?= $n ?>.jpg" href="<?= $photo_dir ?>/<?= $l->seo_url ?>-<?= $l->mls_id ?>-<?= $n ?>.jpg"><img
+                        src="<?= $photo_dir ?>/<?= $l->seo_url ?>-<?= $l->mls_id ?>-<?= $n ?>.jpg"
+                        class="sr-listing-photo sr-listing-photo-details"
+                        alt="<?= $l->subdivision ?> Real Estate - <?= htmlentities($l->address) ?>, <?= htmlentities($l->city) ?>, <?= htmlentities($l->state) ?> - <?= $n ?>"
+                        title="<?= $l->subdivision ?> Real Estate - <?= htmlentities($l->address) ?>, <?= htmlentities($l->city) ?>, <?= htmlentities($l->state) ?> - <?= $n ?>"/></a>
             <?php endwhile; ?>
         </div>
         <div style="clear:both;"></div>
@@ -108,6 +115,7 @@
 
             var marker = new google.maps.Marker({
                 map: map,
+                disableDefaultUI: true,
                 position: new google.maps.LatLng(<?php echo (isset($l->lat) && is_float($l->lat))? $l->lat : 0?>, <?php echo (isset($l->lng) && is_float($l->lng)) ? $l->lng : 0?>)
             });
 

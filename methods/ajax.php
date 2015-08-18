@@ -22,6 +22,34 @@ $response = array(
 	'mes'   => 'Action not found.'
 );
 switch ( $_GET['action'] ) {
+	case "getOnType" :
+		if (isset($_POST['type'])) {
+			$response = $_POST['type'];
+
+			$cities = $sr->metadata->$_POST['type']->fields->city->values;
+			sort($cities);
+			$response = $cities;
+		}
+		if (isset($_POST['areas'])) {
+			$response = $_POST['areas'];
+
+			$areas = $sr->metadata->$_POST['areas']->fields->area->values;
+			sort($areas);
+			$response = $areas;
+		}
+		if (isset($_POST['subd'])) {
+			$response = $_POST['subd'];
+
+			$subdivision = $sr->metadata->$_POST['subd']->fields->subdivision->values;
+			sort($subdivision);
+			$response = $subdivision;
+		}
+//        $response = array(
+//            'error' => 0,
+//            'mes' => 'Get cities',
+//            'resp' => sort($cities)
+//        );
+		break;
 	case "get-listings-amount":
 		$get_vars = json_decode(base64_decode($_GET['conditions']));
 
@@ -446,6 +474,7 @@ switch ( $_GET['action'] ) {
 		require_auth();
 		$id            = - 1;
 		$id2           = - 1;
+//		$id2           = - 1;
 		$templatesList = get_option( 'sr_templates_list' );
 		foreach ( $templatesList as $key => $template ) {
 			if ( $template['name'] == 'seo rets responsive template' ) {
@@ -454,11 +483,15 @@ switch ( $_GET['action'] ) {
 			if ( $template['name'] == 'seo rets responsive template2' ) {
 				$id2 = $key;
 			}
+//			if ( $template['name'] == 'seo rets responsive template3' ) {
+//				$id3 = $key;
+//			}
 
 		}
 
 		$isset  = 1;
 		$isset2 = 1;
+//		$isset3 = 1;
 		if ( $id < 0 ) {
 			$key ++;
 			$id                              = $key;
@@ -474,6 +507,13 @@ switch ( $_GET['action'] ) {
 			$templatesList[ $id2 ]['default'] = 0;
 			$isset2                           = 0;
 		}
+//		if ( $id3 < 0 ) {
+//			$id3                              = $key + 1;
+//			$templatesList[ $id3 ]['name']    = 'seo rets responsive template3';
+//			$templatesList[ $id3 ]['id']      = $templatesList[ $key ]['id'] + 1;
+//			$templatesList[ $id3 ]['default'] = 0;
+//			$isset2                           = 0;
+//		}
 
 		$responsiveResult  = file_get_contents( $sr->server_plugin_dir . "/resources/defaults/template-responsive-result.php" );
 		$responsiveDetails = file_get_contents( $sr->server_plugin_dir . "/resources/defaults/template-responsive-details.php" );
@@ -492,6 +532,15 @@ switch ( $_GET['action'] ) {
 		$templatesList[ $id2 ]['templates']['result']  = $responsiveResult2;
 		$templatesList[ $id2 ]['templates']['css']     = $responsiveCssJs2;
 
+//		$responsiveResult3  = file_get_contents( $sr->server_plugin_dir . "/resources/defaults/template-responsive-result3.php" );
+//		$responsiveDetails3 = file_get_contents( $sr->server_plugin_dir . "/resources/defaults/template-responsive-details3.php" );
+//		$responsiveCssJs3   = file_get_contents( $sr->server_plugin_dir . "/resources/defaults/template-responsive-css-js3.php" );
+//		$responsiveCssJs3=preg_replace('/%WP_PLUGIN_URL%/',WP_PLUGIN_URL,$responsiveCssJs3);
+//
+//		$templatesList[ $id3 ]['templates']['details'] = $responsiveDetails3;
+//		$templatesList[ $id3 ]['templates']['result']  = $responsiveResult3;
+//		$templatesList[ $id3 ]['templates']['css']     = $responsiveCssJs3;
+
 		update_option( 'sr_templates_list', $templatesList );
 
 		if ( $templatesList[ $id ]['default'] == 1 ) {
@@ -508,6 +557,13 @@ switch ( $_GET['action'] ) {
 			$currentTemplate['css']     = $responsiveCssJs2;
 			update_option( 'sr_templates', $currentTemplate );
 		}
+//		if ( $templatesList[ $id3 ]['default'] == 1 ) {
+//			$currentTemplate            = get_option( 'sr_templates' );
+//			$currentTemplate['details'] = $responsiveDetails3;
+//			$currentTemplate['result']  = $responsiveResult3;
+//			$currentTemplate['css']     = $responsiveCssJs3;
+//			update_option( 'sr_templates', $currentTemplate );
+//		}
 
 		$response = array(
 			'error'  => 0,

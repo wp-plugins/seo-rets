@@ -271,11 +271,60 @@ elseif ($type == "script"):
 		seorets.startForm(jQuery(m).nextAll('.sr-formsection:first'), function(root){
 			root.find('.sr-class').change(function(){
 				root.attr("srtype",jQuery(this).attr("srtype"));
+				jQuery.ajax({
+					url: '<?php bloginfo('url') ?>/sr-ajax?action=getOnType',
+					type: 'post',
+					data: {
+						type: jQuery(this).attr("srtype")
+					},
+					success: function (response) {
+						console.log(response);
+						jQuery("#cities").html(' ');
+						i = 0;
+						for (i; i <= response.length - 1; i++) {
+							if (i == 0) {
+								jQuery("<option value='' selected='selected'>Any</option>").appendTo("#cities");
+							}
+
+							jQuery("<option>" + response[i] + "</option>").appendTo("#cities");
+						}
+					}
+				});
+				jQuery.ajax({
+					url: '<?php bloginfo('url') ?>/sr-ajax?action=getOnType',
+					type: 'post',
+					data: {
+						subd: jQuery(this).attr("srtype")
+					},
+					success: function (response) {
+						console.log(response);
+						var show = false;
+						if(response != null){
+							jQuery("#subd-none").removeClass("disp-none");
+						} else {
+							jQuery("#subd-none").addClass("disp-none");
+						}
+//						jQuery("#cities").html(' ');
+//						i = 0;
+//						for (i; i <= response.length - 1; i++) {
+//							if (i == 0) {
+//								jQuery("<option value='' selected='selected'>Any</option>").appendTo("#cities");
+//							}
+//							console.log(response[i]);
+//							jQuery("<option>" + response[i] + "</option>").appendTo("#cities");
+//						}
+					}
+				});
 			});
 			root.find('.sr-class:checked').change();
 		});
 	});
 })();</script>
+	<style>
+		.disp-none {
+			display: none;
+		}
+	</style>
 <div class="sr-formsection" srtype="res" sroperator="AND">
 	<table border="0" cellspacing="0" cellpadding="0">
 		<tr>
@@ -300,9 +349,9 @@ elseif ($type == "script"):
 						</td>
 					</tr>
 					<tr>
-						<td width="19%" valign="top">Search Within Area:</td>
+						<td width="19%" valign="top">Search Within City:</td>
 						<td width="81%">
-							<select class="sr-formelement" srfield="city" sroperator="=" multiple="">
+							<select id="cities" class="sr-formelement" srfield="city" sroperator="=" multiple="">
 								<option value="">All</option>
 								<?php
 									$cities = $sr->metadata->res->fields->city->values;
@@ -318,7 +367,7 @@ elseif ($type == "script"):
 						<td>Address:</td>
 						<td><input type="text" name="dsg84" class="sr-formelement" srfield="address" sroperator="LIKE" srloose=""></td>
 					</tr>
-					<tr>
+					<tr id="subd-none" class="disp-none">
 						<td>Subdivision:</td>
 						<td><input type="text" name="sd834" class="sr-formelement" srfield="subdivision" sroperator="LIKE" srloose=""></td>
 					</tr>
