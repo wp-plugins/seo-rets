@@ -29,9 +29,233 @@
 
 
         var zoom_to;
+        var rightPolygon = null;
+        var drawingManager = null;
+        var crtOverlays = [];
+
 
         jQuery(function ($) {
+            function clearOverlays() {
+                console.log('Clear Overlays');
+//                drawingManager.setMap(null);
+                for (var i = 0; i < crtOverlays.length; i++) {
+                    crtOverlays[i].setMap(null);
+                }
+                crtOverlays = [];
 
+            }
+
+
+            function clearPolygon(controlDiv, map) {
+
+                // Set CSS for the control border.
+                var controlUI = document.createElement('div');
+                controlUI.style.backgroundColor = '#fff';
+                controlUI.style.border = '2px solid #fff';
+                controlUI.style.borderRadius = '3px 0 0 3px';
+                controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+                controlUI.style.cursor = 'pointer';
+                controlUI.style.marginBottom = '22px';
+                controlUI.style.textAlign = 'center';
+                controlUI.title = 'Click to clear the map';
+                controlDiv.appendChild(controlUI);
+
+                // Set CSS for the control interior.
+                var controlText = document.createElement('div');
+                controlText.style.color = 'rgb(25,25,25)';
+                controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+                controlText.style.fontSize = '16px';
+                controlText.style.lineHeight = '38px';
+                controlText.style.paddingLeft = '5px';
+                controlText.style.paddingRight = '5px';
+                controlText.innerHTML = 'Clear';
+                controlUI.appendChild(controlText);
+
+                // Setup the click event listeners: simply set the map to Chicago.
+                controlUI.addEventListener('click', function () {
+                    console.log("click to clear");
+                    deleteAllShape();
+                });
+
+            }
+
+            var poly = null;
+            var polysearch = false;
+            var updating_geo = false;
+            console.log(polysearch);
+            function get_form_data_polygon(param) {
+                var form_data = {
+                    "limit": 100,
+                    "polygon": param
+                };
+                $("#search-form select").each(function () {
+                    if ($(this).val() != "") form_data[this.name] = $(this).val();
+                });
+                return form_data;
+            };
+
+            function searchInPolygon(polygon) {
+                drawingManager.setDrawingMode(null);
+                clearOverlays();
+                var vertices = polygon.getPath();
+                var param = "";
+                for (var i = 0; i < vertices.length; i++) {
+                    param += vertices.getAt(i).lat() + "," + vertices.getAt(i).lng();
+                    if (i < vertices.length - 1) {
+                        param += "|";
+                    }
+                }
+                $("#ajax-loader, #ajax-loader2").show();
+
+                jQuery.ajax({
+                    url: '<?php bloginfo('url') ?>/sr-ajax?action=getOnPolygon',
+                    type: 'post',
+                    data: get_form_data_polygon(param),
+                    success: function (response) {
+                        $("#ajax-loader, #ajax-loader2").hide();
+                        console.log(response);
+                        map_listings_pol(response.result);
+                    }
+                });
+
+            }
+
+            /***************/
+            function map_listings_pol(listings) {
+
+                var add_listings_to_map = function () {
+                    for (var n = 0; n < markers.length; n++) {
+                        markers[n].setMap(null);
+                    }
+                    markers = [];
+                    bounds = new google.maps.LatLngBounds();
+
+
+                    $("#listings").html("");
+                    console.log(listings);
+                    for (var n = 0; n < listings.length; n++) {
+
+                        var listing = listings[n];
+
+                        $("#listings").html($("#listings").html() + '<div class="sr-content" style="margin-top: 10px;"><div class="listing row" style="margin-left: 0px;margin-right:0px" onclick="zoom_to(' + n + ')"> <div class="col-md-4 col-sm-4"><a href="<?php bloginfo('url') ?>' + listing.url + '"> <img class="img-responsive" src="' + "http://img.seorets.com/<?php echo $seo_rets_plugin->feed->server_name ?>/" + listing.seo_url + "-" + listing.mls_id + "-1.jpg" + '"> </a></div> <div class="col-md-8 col-sm-8"> <div class="row"> <div class="col-md-12 col-sm-12"><a href="<?php bloginfo('url') ?>' + listing.url + '">' + listing.address + '</a></div> </div> <div class="row"> <div class="col-md-12"> $' + addCommas(listing.price) + ' - ' + listing.city + ', ' + listing.state + '</div> </div> ' + ((typeof listing.proj_name != 'undefined' && typeof listing.unit_number != 'undefined') ? ' <div class="row"> <div class="col-md-8">' + listing.proj_name + '</div> <div class="col-md-4">' + listing.unit_number + '</div> </div> ' : '') + ' <div class="row"> <div class="col-md-8 col-sm-8">Beds:</div> <div class="col-md-4 col-sm-4">' + listing.bedrooms + '</div> </div> <div class="row"> <div class="col-md-8 col-sm-8">Baths:</div> <div class="col-md-4 col-sm-4">' + listing.baths + '</div> </div> ' + ((typeof listing.waterview != 'undefined') ? ' <div class="row"> <div class="col-md-12">Waterview:</div></div><div class="row"><div class="col-md-12">' + listing.waterview + '</div></div>' : '') + '</div></div></div>');
+
+
+                        var position = new google.maps.LatLng(listing.lat, listing.lng);
+
+                        infos[n] = new google.maps.InfoWindow({
+                            content: '<table><tr><td><a target="_parent" href="<?php bloginfo('url') ?>' + listing.url + '"><img style="width:130px;height:86px;" src="http://img.seorets.com/<?php echo $seo_rets_plugin->feed->server_name?>/' + listing.seo_url + '-' + listing.mls_id + '-1.jpg" /' + '></a></td><td valign="top" style="padding-left:5px;"><strong><a target="_parent" href="<?php bloginfo('url') ?>' + listing.url + '">' + listing.address + '</a></strong><br /' + '>Price: $' + addCommas(listing.price) + '<br /' + '>Bedrooms: ' + listing.bedrooms + '<br /' + '>Baths: ' + listing.baths_full + '</td></tr></table>'
+                        });
+
+                        markers[n] = new google.maps.Marker({
+                            position: position,
+                            map: map,
+                            title: listing.address,
+                            icon: "<?php bloginfo('url') ?>/wp-content/plugins/seo-rets/resources/images/marker.png"
+                        });
+
+                        var clicked_index = n;
+
+                        google.maps.event.addListener(markers[n], 'click', (function (x) {
+                            return function () {
+                                updating_geo = true;
+                                $(".listing").css("background-color", "#FFF");
+                                close_infos();
+                                infos[x].open(map, markers[x]);
+                                var listings_el = $("#listings");
+                                var listing_el = $(".listing:eq(" + x + ")");
+                                listings_el.animate({
+                                    scrollTop: (listings_el.scrollTop() + listing_el.position().top) - ((listings_el.height() / 2) - (listing_el.height() / 2))
+                                }, 1000, function () {
+                                    listing_el.css("background-color", "#EEE");
+                                    setTimeout(function () {
+                                        updating_geo = false;
+                                    }, 1000);
+                                });
+                            };
+                        })(n));
+
+
+                        bounds.extend(position);
+                    }
+
+                    if (!inbounds) map.fitBounds(bounds);
+                    inbounds = false;
+
+
+                };
+
+                var needs_geocoding = [];
+
+
+                for (var n = 0; n < listings.length; n++) {
+                    if (((typeof listings[n].lat) == "undefined") || isNaN(listings[n].lat) || isNaN(listings[n].lng) || listings[n].lat == 0 || listings[n].lng == 0) {
+                        needs_geocoding.push({
+                            index: n,
+                            address: listings[n].address + " " + listings[n].city + ", " + listings[n].state
+                        });
+                    }
+                }
+
+                if (needs_geocoding.length > 0) {
+                    $.ajax({
+                        url: '<?php bloginfo('url') ?>/sr-ajax?action=geocode',
+                        type: 'post',
+                        data: {
+                            geocode: JSON.stringify(needs_geocoding)
+                        },
+                        success: function (response) {
+
+                            if (response !== null) {
+                                for (var n = 0; n < response.geocode.length; n++) {
+                                    listings[response.geocode[n].index].lat = response.geocode[n].latitude;
+                                    listings[response.geocode[n].index].lng = response.geocode[n].longitude;
+                                }
+                            } else {
+
+                                for (var n = 0; n < needs_geocoding.length; n++) {
+                                    delete listings[needs_geocoding[n].index];
+                                }
+
+                                listings = Object.keys(listings).map(function (v) {
+                                    return listings[v];
+                                });
+                            }
+
+                            add_listings_to_map();
+                            updating = true;
+
+                        }
+                    });
+                } else {
+                    add_listings_to_map();
+                    updating = true;
+
+                }
+            };
+            /***************/
+            jQuery.ajax({
+                url: '<?php bloginfo('url') ?>/sr-ajax?action=getOnType',
+                type: 'post',
+                data: {
+                    subd: jQuery('#property-type').val()
+                },
+                success: function (response) {
+                    if (response != null) {
+                        jQuery("#subd-none").removeClass("disp-none");
+                        jQuery("#subdivision").html(' ');
+                        i = 0;
+                        for (i; i <= response.length - 1; i++) {
+                            if (i == 0) {
+                                jQuery("<option value='' selected='selected'>Any</option>").appendTo("#subdivision");
+                            }
+//                                console.log(response[i]);
+                            jQuery("<option>" + response[i] + "</option>").appendTo("#subdivision");
+                        }
+                    } else {
+                        jQuery("#subd-none").addClass("disp-none");
+                    }
+                }
+            });
             jQuery('#proj_name').change(function () {
 
                 if (jQuery('#property-type').val() != 'cnd' && jQuery('#proj_name').val() != '') {
@@ -42,7 +266,7 @@
                 if (jQuery('#property-type').val() != '') {
 //                    console.log(jQuery('#property-type').val());
 
-                    $.ajax({
+                    jQuery.ajax({
                         url: '<?php bloginfo('url') ?>/sr-ajax?action=getOnType',
                         type: 'post',
                         data: {
@@ -61,7 +285,7 @@
                             }
                         }
                     });
-                    $.ajax({
+                    jQuery.ajax({
                         url: '<?php bloginfo('url') ?>/sr-ajax?action=getOnType',
                         type: 'post',
                         data: {
@@ -80,7 +304,7 @@
                             }
                         }
                     });
-                    $.ajax({
+                    jQuery.ajax({
                         url: '<?php bloginfo('url') ?>/sr-ajax?action=getOnType',
                         type: 'post',
                         data: {
@@ -104,13 +328,108 @@
                         }
                     });
                 }
-            })
-            ;
+            });
+
             var map = new google.maps.Map(document.getElementById('map-canvas'), {
                 zoom: 4,
                 center: new google.maps.LatLng(30.375393, -86.358401),
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                disableDefaultUI: true
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+            var centerControlDiv = document.createElement('div');
+            var clearPolygon = new clearPolygon(centerControlDiv, map);
+
+            centerControlDiv.index = 1;
+//            map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(centerControlDiv);
+
+            drawingManager = new google.maps.drawing.DrawingManager({
+                drawingControl: true,
+                drawingControlOptions: {
+                    drawingModes: [google.maps.drawing.OverlayType.POLYGON],
+                    position: google.maps.ControlPosition.TOP_CENTER
+                },
+                markerOptions: {
+                    draggable: true
+                },
+                polygonOptions: {
+                    strokeWeight: 2,
+                    fillOpacity: 0.45,
+                    fillColor: "#FF0000",
+                    strokeColor: "#FF0000",
+                    editable: true
+                }
+            });
+
+            drawingManager.setMap(map);
+            var all_overlays = [];
+            var selectedShape;
+            var colors = ['#1E90FF', '#FF1493', '#32CD32', '#FF8C00', '#4B0082'];
+            var selectedColor;
+            var colorButtons = {};
+
+            function clearSelection() {
+                if (selectedShape) {
+                    selectedShape.setEditable(false);
+                    selectedShape = null;
+                }
+            }
+
+            function setSelection(shape) {
+                clearSelection();
+                selectedShape = shape;
+                shape.setEditable(true);
+//                selectColor(shape.get('fillColor') || shape.get('strokeColor'));
+            }
+
+            function deleteSelectedShape() {
+                if (selectedShape) {
+                    selectedShape.setMap(null);
+                }
+            }
+
+            function deleteAllShape() {
+                console.log('deleteAllShape |362');
+                for (var i = 0; i < all_overlays.length; i++) {
+                    all_overlays[i].overlay.setMap(null);
+                }
+                all_overlays = [];
+                update_map();
+                map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].clear();
+
+            }
+
+            google.maps.event.addListener(drawingManager, 'overlaycomplete', function (e) {
+                all_overlays.push(e);
+                if (e.type != google.maps.drawing.OverlayType.MARKER) {
+                    console.log(e);
+                    var newShape = e.overlay;
+                    newShape.type = e.type;
+                    setSelection(newShape);
+//                    alert('as');
+                }
+            });
+            google.maps.event.addListener(drawingManager, 'polygoncomplete', function (polygon) {
+                map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(centerControlDiv);
+                polysearch = true;
+//                console.log(polygon);
+                poly = polygon;
+                google.maps.event.addListener(polygon.getPaths().getAt(0), 'set_at', function () {
+                    searchInPolygon(polygon);
+                });
+                google.maps.event.addListener(polygon.getPaths().getAt(0), 'insert_at', function () {
+                    searchInPolygon(polygon);
+                });
+                google.maps.event.addListener(polygon.getPaths().getAt(0), 'remove_at', function () {
+                    searchInPolygon(polygon);
+                });
+
+
+                if (rightPolygon != null) {
+                    rightPolygon.setMap(null);
+                }
+                rightPolygon = polygon;
+//                update_map();
+                searchInPolygon(polygon);
+
             });
             var inbounds = false;
             var updating = false;
@@ -143,6 +462,7 @@
 
             var update_map = function () {
 
+                console.log('upd map |347');
                 var get_form_data = function () {
 
                     var b = map.getBounds();
@@ -295,25 +615,29 @@
                     }
                 });
             };
-
-
-            $("#search-area select").change(update_map);
-
-
+//            $("#search-area select").change(update_map);
+            $("#search-area select").change(function () {
+                if (!polysearch) {
+                    console.log('CHANGE | 502');
+                    update_map();
+                } else {
+                    console.log('CHANGE Else | 505');
+                    searchInPolygon(poly);
+                }
+            });
             google.maps.event.addListener(map, 'idle', function () {
                 if (!updating) {
                     //alert(map.getBounds());
+                    console.log('Listaner |513');
                     inbounds = true;
                     update_map();
                 }
             });
 
-
             update_map();
 
 
-        })
-        ;
+        });
 
 
     </script>
@@ -340,8 +664,12 @@
                             if ($sr->is_type_hidden($key)) {
                                 continue;
                             }
+                            if (($key == 'res') || ($key == 'cre')) {
+                                echo "<option selected  value='$key' /> " . (isset($val->pretty_name) ? $val->pretty_name : $key) . "</option>";
+                            } else {
+                                echo "<option  value='$key' /> " . (isset($val->pretty_name) ? $val->pretty_name : $key) . "</option>";
+                            }
 
-                            echo "<option value='$key' /> " . (isset($val->pretty_name) ? $val->pretty_name : $key) . "</option>";
 
                         }
                         ?>
@@ -597,7 +925,7 @@
             </div>
         </div>
         <div style="clear:both;"></div>
-<!--        <p>Powered By <a href="http://seorets.com/" target="_blank">SEO RETS</a></p>-->
+        <!--        <p>Powered By <a href="http://seorets.com/" target="_blank">SEO RETS</a></p>-->
 
     </div>
 

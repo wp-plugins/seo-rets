@@ -1,81 +1,297 @@
-#sr-popup, #sr-popup2 {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    z-index: 9999;
-    background-color: rgba(0, 0, 0, 0.7);
-}
+/*#sr-popup, #sr-popup2 {*/
+/*width: 100%;*/
+/*height: 100%;*/
+/*position: fixed;*/
+/*top: 0px;*/
+/*left: 0px;*/
+/*z-index: 9999;*/
+/*background-color: rgba(0, 0, 0, 0.7);*/
+/*}*/
 
-#sr-popup iframe, #sr-popup2 iframe {
-    width: 100%;
-    height: 100%;
-}
+/*#sr-popup iframe, #sr-popup2 iframe {*/
+/*width: 100%;*/
+/*height: 100%;*/
+/*}*/
 
-#sr-popup-form, #sr-popup-form2 {
+/*#sr-popup-form, #sr-popup-form2 {*/
+/*position: relative;*/
+
+/*width: 60%;*/
+/*padding: 10px;*/
+/*margin: 5% auto auto auto;*/
+/*background-color: white;*/
+/*-webkit-border-radius: 6px;*/
+/*-moz-border-radius: 6px;*/
+/*border-radius: 6px;*/
+/*box-shadow: 1px 2px 6px rgba(0,0,0, 0.6);*/
+/*-moz-box-shadow: 1px 2px 6px rgba(0,0,0, 0.6);*/
+/*-webkit-box-shadow: 1px 2px 6px rgba(0,0,0, 0.6);*/
+
+/*}*/
+
+/*#sr-popup-close, #sr-popup-close2 {*/
+/*position: absolute;*/
+/*right: -13px;*/
+/*top: -13px;*/
+/*width:50px;*/
+/*}*/
+
+/*@media only screen*/
+/*and (max-width : 860px) {*/
+
+/*}*/
+/*@media only screen*/
+/*and (max-width : 650px) {*/
+/*#sr-popup-form{*/
+/*width:90%;*/
+/*}*/
+
+/*}*/
+/*@media only screen*/
+/*and (max-width : 584px) {*/
+/*#sr-popup-form{*/
+/*}*/
+/*}*/
+/*@media only screen*/
+/*and (max-width : 425px) {*/
+/*#sr-popup-form{*/
+/*}*/
+/*}*/
+/*@media only screen*/
+/*and (max-width : 320px) {*/
+/*#sr-popup-form {*/
+/*}*/
+/*}*/
+/*@media only screen*/
+/*and (max-width : 281px) {*/
+/*#sr-popup-form {*/
+/*width: 85%;*/
+/*}*/
+/*}*/
+/*@media only screen*/
+/*and (max-width : 234px) {*/
+/*#sr-popup-form {*/
+/*}*/
+/*}*/
+/*@media only screen*/
+/*and (max-height : 505px) {*/
+/*#sr-popup-form {*/
+/*/!*height:*!/*/
+/*}*/
+/*}*/
+#sr-popup {
+    background: white;
+    padding: 20px 30px;
+    text-align: left;
+    max-width: 70%;
+    margin: 40px auto;
     position: relative;
-
-    width: 60%;
-    padding: 10px;
-    margin: 5% auto auto auto;
-    background-color: white;
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-    box-shadow: 1px 2px 6px rgba(0,0,0, 0.6);
-    -moz-box-shadow: 1px 2px 6px rgba(0,0,0, 0.6);
-    -webkit-box-shadow: 1px 2px 6px rgba(0,0,0, 0.6);
-
+}
+#sr-popup2 {
+    background: white;
+    padding: 20px 30px;
+    text-align: left;
+    max-width: 70%;
+    margin: 40px auto;
+    position: relative;
+}
+/* Styles for dialog window */
+#small-dialog {
+    background: white;
+    padding: 20px 30px;
+    text-align: left;
+    max-width: 400px;
+    margin: 40px auto;
+    position: relative;
 }
 
-#sr-popup-close, #sr-popup-close2 {
-    position: absolute;
-    right: -13px;
-    top: -13px;
-    width:50px;
+
+/**
+ * Fade-zoom animation for first dialog
+ */
+
+/* start state */
+.my-mfp-zoom-in .zoom-anim-dialog {
+    opacity: 0;
+
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+
+
+
+    -webkit-transform: scale(0.8);
+    -moz-transform: scale(0.8);
+    -ms-transform: scale(0.8);
+    -o-transform: scale(0.8);
+    transform: scale(0.8);
 }
 
-@media only screen
-and (max-width : 860px) {
+/* animate in */
+.my-mfp-zoom-in.mfp-ready .zoom-anim-dialog {
+    opacity: 1;
+
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1);
+}
+
+/* animate out */
+.my-mfp-zoom-in.mfp-removing .zoom-anim-dialog {
+    -webkit-transform: scale(0.8);
+    -moz-transform: scale(0.8);
+    -ms-transform: scale(0.8);
+    -o-transform: scale(0.8);
+    transform: scale(0.8);
+
+    opacity: 0;
+}
+
+/* Dark overlay, start state */
+.my-mfp-zoom-in.mfp-bg {
+    opacity: 0;
+    -webkit-transition: opacity 0.3s ease-out;
+    -moz-transition: opacity 0.3s ease-out;
+    -o-transition: opacity 0.3s ease-out;
+    transition: opacity 0.3s ease-out;
+}
+/* animate in */
+.my-mfp-zoom-in.mfp-ready.mfp-bg {
+    opacity: 0.8;
+}
+/* animate out */
+.my-mfp-zoom-in.mfp-removing.mfp-bg {
+    opacity: 0;
+}
+
+
+
+/**
+ * Fade-move animation for second dialog
+ */
+
+/* at start */
+.my-mfp-slide-bottom .zoom-anim-dialog {
+    opacity: 0;
+    -webkit-transition: all 0.2s ease-out;
+    -moz-transition: all 0.2s ease-out;
+    -o-transition: all 0.2s ease-out;
+    transition: all 0.2s ease-out;
+
+    -webkit-transform: translateY(-20px) perspective( 600px ) rotateX( 10deg );
+    -moz-transform: translateY(-20px) perspective( 600px ) rotateX( 10deg );
+    -ms-transform: translateY(-20px) perspective( 600px ) rotateX( 10deg );
+    -o-transform: translateY(-20px) perspective( 600px ) rotateX( 10deg );
+    transform: translateY(-20px) perspective( 600px ) rotateX( 10deg );
 
 }
-@media only screen
-and (max-width : 650px) {
-    #sr-popup-form{
-        width:90%;
-    }
 
+/* animate in */
+.my-mfp-slide-bottom.mfp-ready .zoom-anim-dialog {
+    opacity: 1;
+    -webkit-transform: translateY(0) perspective( 600px ) rotateX( 0 );
+    -moz-transform: translateY(0) perspective( 600px ) rotateX( 0 );
+    -ms-transform: translateY(0) perspective( 600px ) rotateX( 0 );
+    -o-transform: translateY(0) perspective( 600px ) rotateX( 0 );
+    transform: translateY(0) perspective( 600px ) rotateX( 0 );
 }
-@media only screen
-and (max-width : 584px) {
-    #sr-popup-form{
-    }
+
+/* animate out */
+.my-mfp-slide-bottom.mfp-removing .zoom-anim-dialog {
+    opacity: 0;
+
+    -webkit-transform: translateY(-10px) perspective( 600px ) rotateX( 10deg );
+    -moz-transform: translateY(-10px) perspective( 600px ) rotateX( 10deg );
+    -ms-transform: translateY(-10px) perspective( 600px ) rotateX( 10deg );
+    -o-transform: translateY(-10px) perspective( 600px ) rotateX( 10deg );
+    transform: translateY(-10px) perspective( 600px ) rotateX( 10deg );
 }
-@media only screen
-and (max-width : 425px) {
-    #sr-popup-form{
-    }
+
+/* Dark overlay, start state */
+.my-mfp-slide-bottom.mfp-bg {
+    opacity: 0;
+
+    -webkit-transition: opacity 0.3s ease-out;
+    -moz-transition: opacity 0.3s ease-out;
+    -o-transition: opacity 0.3s ease-out;
+    transition: opacity 0.3s ease-out;
 }
-@media only screen
-and (max-width : 320px) {
-    #sr-popup-form {
-    }
+/* animate in */
+.my-mfp-slide-bottom.mfp-ready.mfp-bg {
+    opacity: 0.8;
 }
-@media only screen
-and (max-width : 281px) {
-    #sr-popup-form {
-        width: 85%;
-    }
+/* animate out */
+.my-mfp-slide-bottom.mfp-removing.mfp-bg {
+    opacity: 0;
 }
-@media only screen
-and (max-width : 234px) {
-    #sr-popup-form {
-    }
+.form-control {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s
 }
-@media only screen
-and (max-height : 505px) {
-    #sr-popup-form {
-        /*height:*/
-    }
+
+.form-control:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6)
+}
+
+.form-control::-moz-placeholder {
+    color: #999;
+    opacity: 1
+}
+
+.form-control:-ms-input-placeholder {
+    color: #999
+}
+
+.form-control::-webkit-input-placeholder {
+    color: #999
+}
+
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+    background-color: #eee;
+    opacity: 1
+}
+
+.form-control[disabled], fieldset[disabled] .form-control {
+    cursor: not-allowed
+}
+
+textarea.form-control {
+    height: auto
+}
+.form-control {
+    border-color: #cfdadd;
+    border-radius: 2px
+}
+
+.form-control, .form-control:focus {
+    -webkit-box-shadow: none;
+    box-shadow: none
+}
+
+.form-control:focus {
+    border-color: #23b7e5
+}
+
+.form-horizontal .control-label.text-left {
+    text-align: left
 }

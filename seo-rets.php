@@ -3,7 +3,7 @@
 Plugin Name: SEO RETS
 Plugin URI: http://seorets.com
 Description: Convert your RETS/IDX feed into an SEO friendly real estate portal
-Version: 3.3.40
+Version: 3.3.41
 Author: SEO RETS, LLC
 Author URI: http://seorets.com
 */
@@ -140,7 +140,7 @@ wp_register_style('sr-magnific-popup', '{$this->plugin_dir}resources/css/magnifi
 wp_register_script('sr-magnific-popup', '{$this->plugin_dir}resources/js/jquery.magnific-popup.min.js', array('jquery'));
 wp_enqueue_style('sr-magnific-popup');
 wp_enqueue_script('sr-magnific-popup');
-
+wp_enqueue_script('thickbox');
 wp_enqueue_script('jquery');
 ");
 
@@ -711,14 +711,20 @@ $wp_rewrite->flush_rules();
 		return ( ( $i == 1 ) ? "" : $i ) . ob_get_clean();
 	}
 
-	private function parse_seo_data( $data ) {
-		$matches = $this->find_matches( $data );
+	private function parse_seo_data($data)
+	{
+		$matches = $this->find_matches($data);
 
-		for ( $n = 0; $n < count( $matches[0] ); $n ++ ) {
-			if ( isset( $this->detail_result->{$matches[1][ $n ]} ) ) {
-				$data = str_replace( $matches[0][ $n ], $this->detail_result->{$matches[1][ $n ]}, $data );
+		for ($n = 0; $n < count($matches[0]); $n++) {
+			if (isset($this->detail_result->{$matches[1][$n]})) {
+				if ($matches[1][$n] == 'unit_number' && $this->detail_result->{$matches[1][$n]} != '') {
+					$data = str_replace($matches[0][$n], '#' . $this->detail_result->{$matches[1][$n]}, $data);
+				} else {
+					$data = str_replace($matches[0][$n], $this->detail_result->{$matches[1][$n]}, $data);
+				}
+
 			} else {
-				$data = str_replace( $matches[0][ $n ], '', $data );
+				$data = str_replace($matches[0][$n], '', $data);
 			}
 		}
 

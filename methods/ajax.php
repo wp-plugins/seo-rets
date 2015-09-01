@@ -22,6 +22,199 @@ $response = array(
 	'mes'   => 'Action not found.'
 );
 switch ( $_GET['action'] ) {
+	case "getOnPolygon" :
+		$conditions = array();
+		if (isset($_POST['city']) && $_POST['city'] != "") {
+			$conditions[] = array(
+				'field' => 'city',
+				'operator' => 'LIKE',
+				'loose' => true,
+				'value' => $_POST['city']
+			);
+		}
+
+		if (isset($_POST['zip']) && $_POST['zip'] != "") {
+			$conditions[] = array(
+				'field' => 'zip',
+				'operator' => 'LIKE',
+				'loose' => true,
+				'value' => $_POST['zip']
+			);
+		}
+
+		if (isset($_POST['waterview']) && $_POST['waterview'] != "") {
+			if (is_array($_POST['waterview'])) {
+				foreach ($_POST['waterview'] as $value) {
+					$conditions[] = array(
+						'field' => 'waterview',
+						'operator' => 'LIKE',
+						'loose' => true,
+						'value' => $value
+					);
+				}
+			} else {
+				$conditions[] = array(
+					'field' => 'waterview',
+					'operator' => 'LIKE',
+					'loose' => true,
+					'value' => $_POST['waterview']
+				);
+			}
+
+		}
+
+		if (isset($_POST['waterfront']) && $_POST['waterfront'] != "") {
+			if (is_array($_POST['waterfront'])) {
+				foreach ($_POST['waterfront'] as $value) {
+					$conditions[] = array(
+						'field' => 'waterfront',
+						'operator' => 'LIKE',
+						'loose' => true,
+						'value' => $value
+					);
+				}
+			} else {
+				$conditions[] = array(
+					'field' => 'waterfront',
+					'operator' => 'LIKE',
+					'loose' => true,
+					'value' => $_POST['waterfront']
+				);
+			}
+
+		}
+
+		if (isset($_POST['price-low']) && $_POST['price-low'] != "") {
+			$conditions[] = array(
+				'field' => 'price',
+				'operator' => '>=',
+				'value' => $_POST['price-low']
+			);
+		}
+
+		if (isset($_POST['price-high']) && $_POST['price-high'] != "") {
+			$conditions[] = array(
+				'field' => 'price',
+				'operator' => '<=',
+				'value' => $_POST['price-high']
+			);
+		}
+
+		if (isset($_POST['bedrooms-low']) && $_POST['bedrooms-low'] != "") {
+			$conditions[] = array(
+				'field' => 'bedrooms',
+				'operator' => '>=',
+				'value' => $_POST['bedrooms-low']
+			);
+		}
+
+		if (isset($_POST['bedrooms-high']) && $_POST['bedrooms-high'] != "") {
+			$conditions[] = array(
+				'field' => 'bedrooms',
+				'operator' => '<=',
+				'value' => $_POST['bedrooms-high']
+			);
+		}
+
+		if (isset($_POST['baths-low']) && $_POST['baths-low'] != "") {
+			$conditions[] = array(
+				'field' => 'baths',
+				'operator' => '>=',
+				'value' => $_POST['baths-low']
+			);
+		}
+
+		if (isset($_POST['baths-high']) && $_POST['baths-high'] != "") {
+			$conditions[] = array(
+				'field' => 'baths',
+				'operator' => '<=',
+				'value' => $_POST['baths-high']
+			);
+		}
+		if (isset($_POST['subdivision']) && $_POST['subdivision'] != "") {
+			$conditions[] = array(
+				'field' => 'subdivision',
+				'operator' => 'LIKE',
+				'loose' => true,
+				'value' => $_POST['subdivision']
+			);
+		}
+		if (isset($_POST['proj_name']) && $_POST['proj_name'] != "") {
+			$conditions[] = array(
+				'field' => 'proj_name',
+				'operator' => 'LIKE',
+				'loose' => true,
+				'value' => $_POST['proj_name']
+			);
+		}
+		if (isset($_POST['area']) && $_POST['area'] != "") {
+			$conditions[] = array(
+				'field' => 'area',
+				'operator' => 'LIKE',
+				'loose' => true,
+				'value' => $_POST['area']
+			);
+		}
+
+
+		$order = isset($_POST['order']) ? explode(":", $_POST['order']) : array();
+
+		if (count($order) != 2) {
+			$order = array(
+				array(
+					'field' => 'price',
+					'order' => 'DESC'
+				)
+			);
+		} else {
+			$save = $order;
+			$order = array(
+				array(
+					'field' => $save[0],
+					'order' => $save[1]
+				)
+			);
+		}
+
+		$prioritization = get_option('sr_prioritization');
+		$prioritization = ($prioritization === false) ? array() : $prioritization;
+		$only = isset($_POST['onlymylistings']) && strtolower($_POST['onlymylistings']) != "no";
+
+		$perpage = isset($_POST['limit']) ? ((int)$_POST['limit'] - 1) : 25;
+		if (isset($_POST['polygon']) && $_POST['polygon'] != "") {
+			$conditions[] = array(
+				'field' => 'pos',
+				'operator' => 'geo',
+				'value' => $_POST['polygon']
+			);
+		}
+
+		$query = $this->prioritize(array(
+			'type' => $_POST['type'],
+			'query' => array(
+				'boolopr' => 'AND',
+//                'polygon' => $_POST['polygon'],
+				'conditions' => $conditions
+			),
+			'order' => $order
+		), $prioritization);
+
+
+		if ($only && count($prioritization) > 0) {
+			array_pop($query);
+		}
+
+		$response = $sr->api_request('get_listings', array(
+			'query' => $query,
+			'type' => $_POST['type'],
+			'limit' => array(
+				'range' => 100
+			)
+		));
+		foreach ($response->result as $index => $listing) {
+			$response->result[$index]->url = $sr->listing_to_url($listing, $_POST['type']);
+		}
+		break;
 	case "getOnType" :
 		if (isset($_POST['type'])) {
 			$response = $_POST['type'];
@@ -44,11 +237,6 @@ switch ( $_GET['action'] ) {
 			sort($subdivision);
 			$response = $subdivision;
 		}
-//        $response = array(
-//            'error' => 0,
-//            'mes' => 'Get cities',
-//            'resp' => sort($cities)
-//        );
 		break;
 	case "get-listings-amount":
 		$get_vars = json_decode(base64_decode($_GET['conditions']));
