@@ -46,6 +46,11 @@ You can create page with market statistics with help of [sr-market] shortcode.
 3. Feed Information
 
 == Changelog ==
+= 3.3.42 =
+* fixed bug.
+* More responsive makeup.
+
+
 = 3.3.41 =
 * Add new function - Polygonal search, user can select area on map in which will be held search.
 * fixed bug.

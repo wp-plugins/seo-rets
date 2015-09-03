@@ -233,12 +233,12 @@
         <div class="col-md-6 col-sm-6">
             <div class="row">
                 <div class="col-md-4 col-sm-4">
-                    <label for="">Price Range:</label>
-                    <input class="form-control" type="text" size="9" id="price-low">
+                    <label for="">Price:</label>
+                    <input class="form-control" type="text" size="9" placeholder="Min" id="price-low">
                 </div>
                 <div class="col-md-4 col-sm-4">
                     <label for="">&nbsp;</label>
-                    <input class="form-control" type="text" size="9" id="price-high">
+                    <input class="form-control" type="text" size="9" placeholder="Max" id="price-high">
                 </div>
                 <div class="col-md-4 col-sm-4">
                     <label for="">&nbsp;</label>

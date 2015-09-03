@@ -5,7 +5,7 @@ $plugin_id = $sr->admin_id;
 
 if ( isset($_POST['submit']) ) {
 
-    if ( $_POST['banner'] && $_POST['logo'] ) {
+    if ( $_POST['banner'] || $_POST['logo'] || $_POST['name'] || $_POST['phone'] ) {
         $logo_name = pathinfo(parse_url($_POST['logo'], PHP_URL_PATH), PATHINFO_BASENAME);
         $banner_name = pathinfo(parse_url($_POST['banner'], PHP_URL_PATH), PATHINFO_BASENAME);
 

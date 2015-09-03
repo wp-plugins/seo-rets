@@ -10,8 +10,6 @@
 
     wp_enqueue_style('sr_splitSearch', $this->css_resources_dir . 'splitsearch.css');
     wp_print_styles(array('sr_splitSearch'));
-
-
     ?>
     <script type="text/javascript">
 
@@ -36,7 +34,7 @@
 
         jQuery(function ($) {
             function clearOverlays() {
-                console.log('Clear Overlays');
+//                console.log('Clear Overlays');
 //                drawingManager.setMap(null);
                 for (var i = 0; i < crtOverlays.length; i++) {
                     crtOverlays[i].setMap(null);
@@ -73,7 +71,7 @@
 
                 // Setup the click event listeners: simply set the map to Chicago.
                 controlUI.addEventListener('click', function () {
-                    console.log("click to clear");
+//                    console.log("click to clear");
                     deleteAllShape();
                 });
 
@@ -82,7 +80,7 @@
             var poly = null;
             var polysearch = false;
             var updating_geo = false;
-            console.log(polysearch);
+//            console.log(polysearch);
             function get_form_data_polygon(param) {
                 var form_data = {
                     "limit": 100,
@@ -113,7 +111,7 @@
                     data: get_form_data_polygon(param),
                     success: function (response) {
                         $("#ajax-loader, #ajax-loader2").hide();
-                        console.log(response);
+//                        console.log(response);
                         map_listings_pol(response.result);
                     }
                 });
@@ -132,7 +130,7 @@
 
 
                     $("#listings").html("");
-                    console.log(listings);
+//                    console.log(listings);
                     for (var n = 0; n < listings.length; n++) {
 
                         var listing = listings[n];
@@ -387,7 +385,7 @@
             }
 
             function deleteAllShape() {
-                console.log('deleteAllShape |362');
+//                console.log('deleteAllShape |362');
                 for (var i = 0; i < all_overlays.length; i++) {
                     all_overlays[i].overlay.setMap(null);
                 }
@@ -400,7 +398,7 @@
             google.maps.event.addListener(drawingManager, 'overlaycomplete', function (e) {
                 all_overlays.push(e);
                 if (e.type != google.maps.drawing.OverlayType.MARKER) {
-                    console.log(e);
+//                    console.log(e);
                     var newShape = e.overlay;
                     newShape.type = e.type;
                     setSelection(newShape);
@@ -462,7 +460,7 @@
 
             var update_map = function () {
 
-                console.log('upd map |347');
+//                console.log('upd map |347');
                 var get_form_data = function () {
 
                     var b = map.getBounds();
@@ -504,7 +502,7 @@
 
 
                         $("#listings").html("");
-                        console.log(listings);
+//                        console.log(listings);
                         for (var n = 0; n < listings.length; n++) {
 
                             var listing = listings[n];
@@ -618,17 +616,17 @@
 //            $("#search-area select").change(update_map);
             $("#search-area select").change(function () {
                 if (!polysearch) {
-                    console.log('CHANGE | 502');
+//                    console.log('CHANGE | 502');
                     update_map();
                 } else {
-                    console.log('CHANGE Else | 505');
+//                    console.log('CHANGE Else | 505');
                     searchInPolygon(poly);
                 }
             });
             google.maps.event.addListener(map, 'idle', function () {
                 if (!updating) {
                     //alert(map.getBounds());
-                    console.log('Listaner |513');
+//                    console.log('Listaner |513');
                     inbounds = true;
                     update_map();
                 }
@@ -645,12 +643,6 @@
     wp_enqueue_style('sr_templates_splitsearch', $this->css_resources_dir . 'templates/splitsearch.css');
     wp_print_styles(array('sr_templates_splitsearch'));
     ?>
-
-
-    <!--<div class="ribbon">-->
-    <!--	<h1 class="entry-title">Map Search</h1>-->
-    <!--</div>-->
-
     <div id="search-area" class="table-responsive respstyle">
         <div id="search-form">
 
@@ -755,46 +747,40 @@
             </div>
             <div class="row" style="margin-top: 15px">
                 <div class="col-md-4 col-sm-4">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label for="">Min price:</label>
-                            <select class="form-control" name="price-low">
-                                <option value="">Any</option>
-                                <option value="100000">$100,000</option>
-                                <option value="125000">$125,000</option>
-                                <option value="150000">$150,000</option>
-                                <option value="175000">$175,000</option>
-                                <option value="200000">$200,000</option>
-                                <option value="225000">$225,000</option>
-                                <option value="250000">$250,000</option>
-                                <option value="275000">$275,000</option>
-                                <option value="300000">$300,000</option>
-                                <option value="325000">$325,000</option>
-                                <option value="350000">$350,000</option>
-                                <option value="375000">$375,000</option>
-                                <option value="400000">$400,000</option>
-                                <option value="425000">$425,000</option>
-                                <option value="450000">$450,000</option>
-                                <option value="475000">$475,000</option>
-                                <option value="500000">$500,000</option>
-                                <option value="600000">$600,000</option>
-                                <option value="700000">$700,000</option>
-                                <option value="800000">$800,000</option>
-                                <option value="900000">$900,000</option>
-                                <option value="1000000">$1,000,000</option>
-                                <option value="1500000">$1,500,000</option>
-                                <option value="2000000">$2,000,000</option>
-                                <option value="2500000">$2,500,000</option>
-                                <option value="3000000">$3,000,000</option>
-                                <option value="3500000">$3,500,000</option>
-                                <option value="4000000">$4,000,000</option>
-                                <option value="4500000">$4,500,000</option>
-                                <option value="5000000">$5,000,000</option>
-                            </select>
-                        </div>
-                        <!--                        <div class="col-md-4 col-sm-4"> City:</div>-->
-
-                    </div>
+                    <label for="">Min price:</label>
+                    <select class="form-control" name="price-low">
+                        <option value="">Any</option>
+                        <option value="100000">$100,000</option>
+                        <option value="125000">$125,000</option>
+                        <option value="150000">$150,000</option>
+                        <option value="175000">$175,000</option>
+                        <option value="200000">$200,000</option>
+                        <option value="225000">$225,000</option>
+                        <option value="250000">$250,000</option>
+                        <option value="275000">$275,000</option>
+                        <option value="300000">$300,000</option>
+                        <option value="325000">$325,000</option>
+                        <option value="350000">$350,000</option>
+                        <option value="375000">$375,000</option>
+                        <option value="400000">$400,000</option>
+                        <option value="425000">$425,000</option>
+                        <option value="450000">$450,000</option>
+                        <option value="475000">$475,000</option>
+                        <option value="500000">$500,000</option>
+                        <option value="600000">$600,000</option>
+                        <option value="700000">$700,000</option>
+                        <option value="800000">$800,000</option>
+                        <option value="900000">$900,000</option>
+                        <option value="1000000">$1,000,000</option>
+                        <option value="1500000">$1,500,000</option>
+                        <option value="2000000">$2,000,000</option>
+                        <option value="2500000">$2,500,000</option>
+                        <option value="3000000">$3,000,000</option>
+                        <option value="3500000">$3,500,000</option>
+                        <option value="4000000">$4,000,000</option>
+                        <option value="4500000">$4,500,000</option>
+                        <option value="5000000">$5,000,000</option>
+                    </select>
                 </div>
                 <div class="col-md-4 col-sm-4">
 
@@ -838,79 +824,59 @@
                     <!--                        <div class="col-md-4 col-sm-4">Waterfront:</div>-->
 
                 </div>
-                <!--            </div>-->
                 <div class="col-md-4 col-sm-4">
-                    <div class="row">
-                        <!--                        <div class="col-md-4 col-sm-4">Waterview:</div>-->
-                        <div class="col-md-12">
-                            <label for="">City:</label>
-                            <select id="cities" class="form-control" name="city">
-                                <option value="" selected="selected">Any</option>
-                                <?php
-                                $cities = $sr->metadata->res->fields->city->values;
-                                sort($cities);
-                                foreach ($cities as $city) {
-                                    echo "<option>" . htmlentities($city) . "</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
+                    <label for="">City:</label>
+                    <select id="cities" class="form-control" name="city">
+                        <option value="" selected="selected">Any</option>
+                        <?php
+                        $cities = $sr->metadata->res->fields->city->values;
+                        sort($cities);
+                        foreach ($cities as $city) {
+                            echo "<option>" . htmlentities($city) . "</option>";
+                        }
+                        ?>
+                    </select>
                 </div>
             </div>
             <div class="row" style="margin-top: 15px">
                 <div class="col-md-4 col-sm-4">
-                    <div class="row">
-                        <!--                        <div class="col-md-4 col-sm-4"> Area:</div>-->
-                        <div class="col-md-12">
-                            <label for="">Area:</label>
-                            <select class="form-control" id="areas" name="area">
-                                <option value="">Any</option>
-                                <?php
-                                $areas = $sr->metadata->res->fields->area->values;
-                                sort($areas);
-                                foreach ($areas as $area) {
-                                    echo "<option value='$area'>" . htmlentities($area) . "</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
+
+                    <label for="">Area:</label>
+                    <select class="form-control" id="areas" name="area">
+                        <option value="">Any</option>
+                        <?php
+                        $areas = $sr->metadata->res->fields->area->values;
+                        sort($areas);
+                        foreach ($areas as $area) {
+                            echo "<option value='$area'>" . htmlentities($area) . "</option>";
+                        }
+                        ?>
+                    </select>
+
                 </div>
                 <div id="subd-none" class="col-md-4 col-sm-4 disp-none">
-                    <div class="row">
-                        <!--                        <div class="col-md-4 col-sm-4"> Area:</div>-->
-                        <div class="col-md-12">
-                            <label for="">Subdivision:</label>
-                            <select class="form-control" id="subdivision" name="subdivision">
-                                <option value="">Any</option>
-                                <?php
-                                $subdivision = $sr->metadata->res->fields->subdivision->values;
-                                sort($subdivision);
-                                foreach ($subdivision as $subd) {
-                                    echo "<option value='$subd'>" . htmlentities($subd) . "</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
+                    <label for="">Subdivision:</label>
+                    <select class="form-control" id="subdivision" name="subdivision">
+                        <option value="">Any</option>
+                        <?php
+                        $subdivision = $sr->metadata->res->fields->subdivision->values;
+                        sort($subdivision);
+                        foreach ($subdivision as $subd) {
+                            echo "<option value='$subd'>" . htmlentities($subd) . "</option>";
+                        }
+                        ?>
+                    </select>
                 </div>
                 <div class="col-md-4 col-sm-4">
-                    <div class="row">
-                        <!--                        <div class="col-md-4 col-sm-4">Order:</div>-->
-                        <div class="col-md-12">
-                            <label for="">Order:</label>
-                            <select class="form-control" name="order">
-                                <option value="price:DESC">Price High to Low</option>
-                                <option value="price:ASC">Price Low to High</option>
-                            </select>
-                        </div>
-                    </div>
+                    <label for="">Order:</label>
+                    <select class="form-control" name="order">
+                        <option value="price:DESC">Price High to Low</option>
+                        <option value="price:ASC">Price Low to High</option>
+                    </select>
                 </div>
             </div>
 
         </div>
-
         <div id="listings-container" class="col-md-6">
             <div id="listings"></div>
             <img id="ajax-loader2" src="<?php echo $this->plugin_dir ?>resources/images/ajax2.gif"
@@ -924,9 +890,5 @@
                         src="<?php echo $this->plugin_dir ?>resources/images/ajax.gif"/></div>
             </div>
         </div>
-        <div style="clear:both;"></div>
-        <!--        <p>Powered By <a href="http://seorets.com/" target="_blank">SEO RETS</a></p>-->
-
     </div>
-
 </div>

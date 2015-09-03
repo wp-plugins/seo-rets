@@ -114,13 +114,13 @@
         <div class="col-md-6 col-sm-6">
             <div class="row">
                 <div class="col-md-4 col-sm-4">
-                    <label for="sr-pricefieldl">Price Range:</label>
-                    <input type="text" id="sr-pricefieldl" name="sd94j" class="sr-formelement form-control"
+                    <label for="sr-pricefieldl">Price:</label>
+                    <input type="text" id="sr-pricefieldl" name="sd94j" placeholder="Min" class="sr-formelement form-control"
                            srfield="price" srtype="numeric" sroperator=">=" size="9"/>
                 </div>
                 <div class="col-md-4 col-sm-4">
                     <label for="">&nbsp;</label>
-                    <input type="text" id="sr-pricefieldh" name="mkx73" class="sr-formelement form-control"
+                    <input type="text" id="sr-pricefieldh" name="mkx73" placeholder="Max" class="sr-formelement form-control"
                            srfield="price" srtype="numeric" sroperator="<=" size="9"/>
                 </div>
                 <div class="col-md-4 col-sm-4">

@@ -56,22 +56,43 @@ wp_print_styles(array('sr_templates_listing'));
                 $(".sr-listing-photo-details-main").attr('src', $(sender.children()[0]).attr('src'));
                 $('#main-photo-a').unbind("click").click(function (){sender.click();});
             });
+            $("#sr-alert").click(function () {
+//                var mfp = jQuery.magnificPopup.instance;
+                var htm = '<div id="sr-popup2" class="zoom-anim-dialog"><iframe style="width: 100%;height:300px;border:0;" id="popup-iframe" border="0" scrolling="no" src="<?php echo get_bloginfo('url')?>/sr-alert?mls_id=<?php echo urlencode($l->mls_id)?>&type=<?php echo urlencode($wp_query->query['sr_type'])?>&address=<?php echo urlencode($l->address)?>&city=<?php echo urlencode($l->city)?>&state=<?php echo urlencode($l->state)?>&zip=<?php echo urlencode($l->zip)?>"></iframe></div>';
+                jQuery.magnificPopup.open({
+                    items: {
+                        src:'<?php echo get_bloginfo('url') . '/sr-alert?mls_id=' . urlencode($l->mls_id) . '&type=' . urlencode($wp_query->query['sr_type']) . '&address=' . urlencode($l->address) . '&city=' . urlencode($l->city) . '&state=' . urlencode($l->state) . '&zip=' . urlencode($l->zip) ?>',
+                        type: 'ajax'
+                    },
+                    fixedContentPos: false,
+                    fixedBgPos: true,
 
-            $("#sr-alert").click(function() {
-                $("#sr-popup2").remove();
+                    overflowY: 'auto',
 
-                var htm = '<div id="sr-popup2" style="display:none;"><style>#sr-popup-form2{background-color:#f0f4f5;transition: 0.5s;}@media only screen and (min-width: 630px){#sr-popup-form2{height:360px;width:565px;max-height:95%;}iframe#popup-iframe{height:340px;}}@media only screen and (max-width: 630px){#sr-popup-form2{min-width: 200px; padding-right:20px;max-height: 595px; width: 95%; height: 95%;}iframe#popup-iframe{max-height:570px;}}</style><div id="sr-popup-form2" style="display:none;"><a href="javascript: void(0);"><img src="<?php echo $sr->plugin_dir?>resources/images/close.png" id="sr-popup-close2" /></a><iframe id="popup-iframe" style="border:0;" border="0" scrolling="no" src="<?php echo get_bloginfo('url')?>/sr-alert?mls_id=<?php echo urlencode($l->mls_id)?>&type=<?php echo urlencode($wp_query->query['sr_type'])?>&address=<?php echo urlencode($l->address)?>&city=<?php echo urlencode($l->city)?>&state=<?php echo urlencode($l->state)?>&zip=<?php echo urlencode($l->zip)?>"></iframe></div></div>';
+                    closeBtnInside: true,
+                    preloader: false,
 
-                $("body").append(htm);
-
-                sr_popup2 = $("#sr-popup2");
-
-                sr_popup2.fadeIn("slow", function() {
-                    $("#sr-popup-form2").fadeIn("slow");
+                    midClick: true,
+                    closeOnBgClick: false,
+                    removalDelay: 300,
+                    mainClass: 'my-mfp-zoom-in'
                 });
-
-                $("#sr-popup-close2").click(close_popup2);
             });
+//            $("#sr-alert").click(function() {
+//                $("#sr-popup2").remove();
+//
+//                var htm = '<div id="sr-popup2" style="display:none;"> <style>#sr-popup-form2 { background-color: #f0f4f5; transition: 0.5s; } @media only screen and (min-width: 630px) { #sr-popup-form2 { height: 360px; width: 565px; max-height: 95%; } iframe#popup-iframe { height: 340px; } } @media only screen and (max-width: 630px) { #sr-popup-form2 { min-width: 200px; padding-right: 20px; max-height: 595px; width: 95%; height: 95%; } iframe#popup-iframe { max-height: 570px; } }</style> <div id="sr-popup-form2" style="display:none;"><a href="javascript: void(0);"><img src="<?php //echo $sr->plugin_dir ?>//resources/images/close.png" id="sr-popup-close2"/></a> <iframe id="popup-iframe" style="border:0;" border="0" scrolling="no" src="<?php //bloginfo('url'); ?>///sr-alert?mls_id=<?php //echo urlencode($l->mls_id) ?>//&type=<?php //echo urlencode($wp_query->query['sr_type']) ?>//&address=<?php //echo urlencode($l->address) ?>//&city=<?php //echo urlencode($l->city) ?>//&state=<?php //echo urlencode($l->state) ?>//&zip=<?php //echo urlencode($l->zip) ?>//"></iframe> </div> </div>';
+//
+//                $("body").append(htm);
+//
+//                sr_popup2 = $("#sr-popup2");
+//
+//                sr_popup2.fadeIn("slow", function() {
+//                    $("#sr-popup-form2").fadeIn("slow");
+//                });
+//
+//                $("#sr-popup-close2").click(close_popup2);
+//            });
         });
 
     </script>

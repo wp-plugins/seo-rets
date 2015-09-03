@@ -3,54 +3,131 @@
         "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml">
 
-        <head>
+    <head>
 
-            <title>SEO RETS :: Email Alerts</title>
-            <?php
-            wp_enqueue_style('sr_method_alert_css',$this->css_resources_dir.'methods/alert.css');
-            wp_print_styles(array('sr_method_alert_css'));
-            ?>
+        <title>SEO RETS :: Email Alerts</title>
+        <?php
+        wp_enqueue_style('sr_method_alert_css', $this->css_resources_dir . 'methods/alert.css');
+        wp_print_styles(array('sr_method_alert_css'));
+        ?>
+        <script type="text/javascript">
+            var listing = <?php echo json_encode($_GET) ?>;
+            jQuery(function () {
+                jQuery("#signup").click(function () {
 
 
+                    var name = jQuery("#sr-name").val();
+                    var email = jQuery("#email").val();
+                    var field = jQuery("input[name=type]:checked").val();
 
-            <script type="text/javascript">
-                var listing = <?php echo json_encode($_GET) ?>;
-            </script>
-            <?php wp_enqueue_script('sr_method_alert',$this->js_resources_dir.'methods/alert.js',array( 'jquery' ));
-            wp_print_scripts(array('sr_method_alert'));
-            ?>
+                    if (name == "" || email == "") {
+                        alert("Please fill out entire form.");
+                    } else {
+                        jQuery.ajax({
+                            type: "get",
+                            url: "<?php echo get_bloginfo('url') ?>/sr-subscribe",
+                            data: {
+                                "conditions[0][field]": field,
+                                "conditions[0][operator]": "=",
+                                "conditions[0][value]": listing[field],
+                                "sr-name": name,
+                                "email": email,
+                                "type": "<?php echo addslashes($_GET['type']) ?>"
+                            },
+                            success: function (content) {
+                                jQuery("#container").html("Thanks! You have been signed up for email alerts.");
+//                                jQuery.magnificPopup.close();
+                            }
+                        });
+                    }
 
-        </head>
+                });
+            });
+        </script>
+        <?php
+        //            wp_enqueue_script('sr_method_alert',$this->js_resources_dir.'methods/alert.js',array( 'jquery' ));
+        //            wp_print_scripts(array('sr_method_alert'));
+        ?>
 
-        <body>
-            <div style="text-align:center;" id="container">
-                Sign Up For Email Alerts For:
-                <p>Get daily alerts when the price changes, new photos, and more as listings are changed or added to the MLS. Just choose the type of alert you would like to receive:</p>
-                <div>
-                    <input type="radio" name="type" value="mls_id" checked="checked" /> <strong>Only for <?php echo htmlentities($_GET['address']) ?>, <?php echo htmlentities($_GET['city']) ?>, <?php echo htmlentities($_GET['state']) ?></strong><br />
-                    <input type="radio" name="type" value="city" /> Changes and new additions for all of <?php echo htmlentities($_GET['city']) ?>, <?php echo htmlentities($_GET['state']) ?><br />
-                    <input type="radio" name="type" value="zip" /> Changes and new additions within <?php echo htmlentities($_GET['zip']) ?><br />
+    </head>
+
+    <body>
+    <div style="text-align:center;" id="sr-popup2" class="zoom-anim-dialog">
+        <div id="container">
+            Sign Up For Email Alerts For:
+            <p>Get daily alerts when the price changes, new photos, and more as listings are changed or added to the
+                MLS. Just choose the type of alert you would like to receive:</p>
+
+            <div class="row margin-top-30">
+                <div class="col-md-6 col-sm-6 col-md-offset-3 col-sm-offset-3">
+                    <div class="row margin-top-5">
+                        <label class="i-checks">
+                            <input type="radio" name="type" id="mls" value="mls_id" checked="checked"/>
+                            <i></i>
+                            Only for <?php echo htmlentities($_GET['address']) ?>
+                            , <?php echo htmlentities($_GET['city']) ?>
+                            , <?php echo htmlentities($_GET['state']) ?>
+                        </label>
+                    </div>
+                    <div class="row margin-top-5">
+                        <label class="i-checks">
+                            <input type="radio" name="type" value="city"/>
+                            <i></i>
+                            Changes and new additions for all
+                            of <?php echo htmlentities($_GET['city']) ?>, <?php echo htmlentities($_GET['state']) ?>
+                        </label>
+                    </div>
+                    <div class="row margin-top-5">
+                        <label class="i-checks">
+                            <input type="radio" name="type" value="zip"/>
+                            <i></i>
+                            Changes and new additions
+                            within <?php echo htmlentities($_GET['zip']) ?>
+                        </label>
+                    </div>
                 </div>
-
-                <div style="margin-top:30px;">
-                    Name: <input type="text" id="sr-name" /><br />
-                    Email: <input type="text" id="email" /><br />
-                    <button id="signup">Sign Up</button><br/>
-                    <p>Not enough options? <a href="sr-alert" target="_parent">Click here</a> to further customize your listing alerts.</p>
-                </div>
-                <!-- Commented by David Pope - Broken and need rewrite.
-                <!--<div>
-                    <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Lfki9ESAAAAANZ3ZaQPg6l7W6v2hV3TrayhR9_j" height="300" width="500" frameborder="0" id="captch_frame"></iframe><br/>
-                    <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
-                    <input type="hidden" name="recaptcha_response_field" value="manual_challenge"/>
-                </div>-->  
             </div>
-        </body>
+
+            <div class="row margin-top-30">
+                <div class="col-md-6 col-sm-6 col-md-offset-3 col-sm-offset-3">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4"><label for="sr-name">Name:</label></div>
+                        <div class="col-md-8 col-sm-8"><input class="form-control" type="text" id="sr-name"/></div>
+                    </div>
+                    <div class="row margin-top-5">
+                        <div class="col-md-4 col-sm-4"><label for="sr-name">Email:</label></div>
+                        <div class="col-md-8 col-sm-8"><input class="form-control" type="text" id="email"/></div>
+                    </div>
+                    <div class="row margin-top-5">
+                        <div class="col-md-12 col-sm-12">
+                            <button id="signup">Sign Up</button>
+                        </div>
+                    </div>
+                    <div class="row margin-top-5">
+                        <div class="col-md-12 col-sm-12">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p>Not enough options? <a href="/sr-alerts" target="_parent">Click here</a> to further customize your
+                listing alerts.</p>
+
+            <!-- Commented by David Pope - Broken and need rewrite.
+            <!--<div>
+                <iframe src="http://www.google.com/recaptcha/api/noscript?k=6Lfki9ESAAAAANZ3ZaQPg6l7W6v2hV3TrayhR9_j" height="300" width="500" frameborder="0" id="captch_frame"></iframe><br/>
+                <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+                <input type="hidden" name="recaptcha_response_field" value="manual_challenge"/>
+            </div>-->
+        </div>
+    </div>
+    </body>
 
     </html>
     <?php
 //    exit;
 else :
+
     $currentPage->post_content = do_shortcode("[sr-subscribe]");
     $currentPage->post_title = "Email Alerts";
 endif;
