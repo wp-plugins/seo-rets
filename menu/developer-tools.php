@@ -592,26 +592,50 @@ jQuery(function ($) {
     });
     $("#preview").click(function () {
 
-        $("#sr-popup").remove();
-
-        var htm = '<div id="sr-popup" style="display:none;"><div id="sr-popup-form" style="display:none;">';
-
+//        $("#sr-popup").remove();
+//
+//        var htm = '<div id="sr-popup" style="display:none;"><div id="sr-popup-form" style="display:none;">';
+//
+//        if ($("#force").val() == 'disabled') {
+//            htm += '<a href="javascript: void(0);"><img src="<?php //echo $sr->plugin_dir?>///resources/images/close.png" id="sr-popup-close" /></a>';
+//        }
+//
+//        htm += '<iframe id="sr-popup-frame" scrolling="no" src="<?php //echo get_bloginfo('url')?>///sr-contact?title=' + encodeURIComponent($("#title").val()) + '&sub=' + encodeURIComponent($("#sub").val()) + '&btn=' + encodeURIComponent($("#btn").val()) + '&css=' + encodeURIComponent($("#css").val()) + '&err=' + encodeURIComponent($("#error").val()) + '&success=' + encodeURIComponent($("#success").val()) + '"></iframe></div></div>';
+//
+//        $("body").append(htm);
+//
+//        sr_popup = $("#sr-popup");
+//
+//        sr_popup.fadeIn("slow", function () {
+//            $("#sr-popup-form").fadeIn("slow");
+//        });
+//
+//        jQuery("#sr-popup-close").click(close_popup);
+//        window.setTimeout(callSizeFrame,1150);
+        closeButton = false;
         if ($("#force").val() == 'disabled') {
-            htm += '<a href="javascript: void(0);"><img src="<?php echo $sr->plugin_dir?>/resources/images/close.png" id="sr-popup-close" /></a>';
+            closeButton = true;
         }
+        htm = '<?php echo get_bloginfo('url')?>/sr-contact?title=' + encodeURIComponent($("#title").val()) + '&sub=' + encodeURIComponent($("#sub").val()) + '&btn=' + encodeURIComponent($("#btn").val()) + '&css=' + encodeURIComponent($("#css").val()) + '&err=' + encodeURIComponent($("#error").val()) + '&success=' + encodeURIComponent($("#success").val());
 
-        htm += '<iframe id="sr-popup-frame" scrolling="no" src="<?php echo get_bloginfo('url')?>/sr-contact?title=' + encodeURIComponent($("#title").val()) + '&sub=' + encodeURIComponent($("#sub").val()) + '&btn=' + encodeURIComponent($("#btn").val()) + '&css=' + encodeURIComponent($("#css").val()) + '&err=' + encodeURIComponent($("#error").val()) + '&success=' + encodeURIComponent($("#success").val()) + '"></iframe></div></div>';
+        jQuery.magnificPopup.open({
+            items: {
+                src: htm,
+                type: 'ajax'
+            },
+            fixedContentPos: false,
+            fixedBgPos: true,
 
-        $("body").append(htm);
+            overflowY: 'auto',
+            showCloseBtn : true,
+            closeBtnInside: closeButton,
+            preloader: false,
 
-        sr_popup = $("#sr-popup");
-
-        sr_popup.fadeIn("slow", function () {
-            $("#sr-popup-form").fadeIn("slow");
+            midClick: true,
+            closeOnBgClick: false,
+            removalDelay: 300,
+            mainClass: 'my-mfp-zoom-in'
         });
-
-        jQuery("#sr-popup-close").click(close_popup);
-        window.setTimeout(callSizeFrame,1150);
     });
 
 
