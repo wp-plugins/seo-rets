@@ -46,6 +46,13 @@ You can create page with market statistics with help of [sr-market] shortcode.
 3. Feed Information
 
 == Changelog ==
+= 3.3.44 =
+* fixed Map Geocoding bug.
+* Activate/Deactivate Bootstrap (Seo-rets->Developer Tools->Advanced Settings).
+* Fix makeup style.
+* More responsive makeup.
+
+
 = 3.3.43 =
 * fixed Lead Popup bug.
 * More responsive makeup.

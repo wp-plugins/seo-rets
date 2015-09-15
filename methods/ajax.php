@@ -997,12 +997,12 @@ switch ( $_GET['action'] ) {
 				$_POST['interest'] = 'Buying and Selling';
 			}
 			$emailBody = "Name: " . $_POST['name'] . "\r\n" .
-			             "Email: " . $_POST['email'] . "\r\n" .
-			             "Phone: " . $_POST['phone'] . "\r\n" .
-			             "Price range: " . $_POST['low_price'] . " - " . $_POST['high_price'] . "\r\n" .
-			             "Time Frame: " . $_POST['time_frame'] . "\r\n" .
-			             "Prequalified: " . $_POST['prequalified'] . "\r\n" .
-			             "Interest: " . $_POST['interest'] . "\r\n";
+				"Email: " . $_POST['email'] . "\r\n" .
+				"Phone: " . $_POST['phone'] . "\r\n" .
+				"Price range: " . $_POST['low_price'] . " - " . $_POST['high_price'] . "\r\n" .
+				"Time Frame: " . $_POST['time_frame'] . "\r\n" .
+				"Prequalified: " . $_POST['prequalified'] . "\r\n" .
+				"Interest: " . $_POST['interest'] . "\r\n";
 			$to        = get_option( 'admin_email' );
 			$subject   = "Lead Capture " . get_site_url();
 			$res       = SEO_RETS_Plugin::sendEmail( $to, $subject, $emailBody );
@@ -1034,18 +1034,42 @@ switch ( $_GET['action'] ) {
 			'mes'   => 'Email list updated.'
 		);
 		break;
-    case "emailmethod-save":
-        require_auth();
-        if ( isset( $_POST['emailmethod'] ) && $_POST['emailmethod'] != '' ) {
-            update_option( "sr_emailmethod", $_POST['emailmethod'] );
-        } else {
-            update_option( "sr_emailmethod", false );
-        }
-        $response = array(
-            'error' => 0,
-            'mes'   => 'Email method updated.'
-        );
-        break;
+	case "using_boot-save":
+		require_auth();
+		if ( isset( $_POST['check'] )) {
+			update_option( "sr_boot", $_POST['check'] );
+		} else {
+			update_option( "sr_boot", false );
+		}
+		$response = array(
+			'error' => 0,
+			'mes'   => 'Bootstrap option updated.'
+		);
+		break;
+	case "using_ace-save":
+		require_auth();
+		if ( isset( $_POST['check'] )) {
+			update_option( "sr_aceEditor", $_POST['check'] );
+		} else {
+			update_option( "sr_aceEditor", false );
+		}
+		$response = array(
+			'error' => 0,
+			'mes'   => 'Ace Editor option updated.'
+		);
+		break;
+	case "emailmethod-save":
+		require_auth();
+		if ( isset( $_POST['emailmethod'] ) && $_POST['emailmethod'] != '' ) {
+			update_option( "sr_emailmethod", $_POST['emailmethod'] );
+		} else {
+			update_option( "sr_emailmethod", false );
+		}
+		$response = array(
+			'error' => 0,
+			'mes'   => 'Email method updated.'
+		);
+		break;
 	case "customform-save":
 		require_auth();
 		if ( isset( $_POST['html'] ) && $_POST['html'] != '' ) {

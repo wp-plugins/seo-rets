@@ -10,8 +10,6 @@
 
     wp_enqueue_style('sr_splitSearch', $this->css_resources_dir . 'splitsearch.css');
     wp_print_styles(array('sr_splitSearch'));
-
-
     ?>
     <script type="text/javascript">
 
@@ -36,7 +34,7 @@
 
         jQuery(function ($) {
             function clearOverlays() {
-                console.log('Clear Overlays');
+//                console.log('Clear Overlays');
 //                drawingManager.setMap(null);
                 for (var i = 0; i < crtOverlays.length; i++) {
                     crtOverlays[i].setMap(null);
@@ -73,7 +71,7 @@
 
                 // Setup the click event listeners: simply set the map to Chicago.
                 controlUI.addEventListener('click', function () {
-                    console.log("click to clear");
+//                    console.log("click to clear");
                     deleteAllShape();
                 });
 
@@ -82,7 +80,7 @@
             var poly = null;
             var polysearch = false;
             var updating_geo = false;
-            console.log(polysearch);
+//            console.log(polysearch);
             function get_form_data_polygon(param) {
                 var form_data = {
                     "limit": 100,
@@ -113,7 +111,7 @@
                     data: get_form_data_polygon(param),
                     success: function (response) {
                         $("#ajax-loader, #ajax-loader2").hide();
-                        console.log(response);
+//                        console.log(response);
                         map_listings_pol(response.result);
                     }
                 });
@@ -132,7 +130,6 @@
 
 
                     $("#listings").html("");
-                    console.log(listings);
                     for (var n = 0; n < listings.length; n++) {
 
                         var listing = listings[n];
@@ -329,6 +326,7 @@
                     });
                 }
             });
+
             var map = new google.maps.Map(document.getElementById('map-canvas'), {
                 zoom: 4,
                 center: new google.maps.LatLng(30.375393, -86.358401),
@@ -386,7 +384,7 @@
             }
 
             function deleteAllShape() {
-                console.log('deleteAllShape |362');
+//                console.log('deleteAllShape |362');
                 for (var i = 0; i < all_overlays.length; i++) {
                     all_overlays[i].overlay.setMap(null);
                 }
@@ -399,7 +397,7 @@
             google.maps.event.addListener(drawingManager, 'overlaycomplete', function (e) {
                 all_overlays.push(e);
                 if (e.type != google.maps.drawing.OverlayType.MARKER) {
-                    console.log(e);
+//                    console.log(e);
                     var newShape = e.overlay;
                     newShape.type = e.type;
                     setSelection(newShape);
@@ -461,173 +459,210 @@
 
             var update_map = function () {
 
-                console.log('upd map |347');
-                var get_form_data = function () {
+//                console.log('upd map |347');
+                    var get_form_data = function () {
 
-                    var b = map.getBounds();
+                        var b = map.getBounds();
 
-                    var form_data = {
-                        "limit": 100
-                    };
+                        var form_data = {
+                            "limit": 100
+                        };
 
-                    var truncate_coord = function (coord, percision) {
-                        percision = typeof percision !== 'undefined' ? percision : 6;
+                        var truncate_coord = function (coord, percision) {
+                            percision = typeof percision !== 'undefined' ? percision : 6;
 
-                        var length = coord.toString().split(".")[0].length;
+                            var length = coord.toString().split(".")[0].length;
 
-                        return coord.toPrecision(length + percision);
-                    };
+                            return coord.toPrecision(length + percision);
+                        };
 
-                    if (typeof b != 'undefined' && inbounds) {
-                        form_data['ne-lat'] = Math.ceil(b.getNorthEast().lat() * 1000000) / 1000000;
-                        form_data['ne-lng'] = Math.ceil(b.getNorthEast().lng() * 1000000) / 1000000;
-                        form_data['sw-lat'] = Math.floor(b.getSouthWest().lat() * 1000000) / 1000000;
-                        form_data['sw-lng'] = Math.floor(b.getSouthWest().lng() * 1000000) / 1000000;
-                    }
-
-                    $("#search-form select").each(function () {
-                        if ($(this).val() != "") form_data[this.name] = $(this).val();
-                    });
-
-                    return form_data;
-                };
-
-                var map_listings = function (listings) {
-
-                    var add_listings_to_map = function () {
-                        for (var n = 0; n < markers.length; n++) {
-                            markers[n].setMap(null);
+                        if (typeof b != 'undefined' && inbounds) {
+                            form_data['ne-lat'] = Math.ceil(b.getNorthEast().lat() * 1000000) / 1000000;
+                            form_data['ne-lng'] = Math.ceil(b.getNorthEast().lng() * 1000000) / 1000000;
+                            form_data['sw-lat'] = Math.floor(b.getSouthWest().lat() * 1000000) / 1000000;
+                            form_data['sw-lng'] = Math.floor(b.getSouthWest().lng() * 1000000) / 1000000;
                         }
-                        markers = [];
-                        bounds = new google.maps.LatLngBounds();
+
+                        $("#search-form select").each(function () {
+                            if ($(this).val() != "") form_data[this.name] = $(this).val();
+                        });
+
+                        return form_data;
+                    };
+
+                    var map_listings = function (listings) {
+
+                        var add_listings_to_map = function () {
+                            for (var p = 0; p < markers.length; p++) {
+//                            console.log(markers);
+//                                    console.log("#499" + markers.length);
+                                markers[p].setMap(null);
+                            }
+                            markers = [];
+                            bounds = new google.maps.LatLngBounds();
 
 
-                        $("#listings").html("");
-                        console.log(listings);
-                        for (var n = 0; n < listings.length; n++) {
-
-                            var listing = listings[n];
-
-                            $("#listings").html($("#listings").html() + '<div class="sr-content" style="margin-top: 10px;"><div class="listing row" style="margin-left: 0px;margin-right:0px" onclick="zoom_to(' + n + ')"> <div class="col-md-4 col-sm-4"><a href="<?php bloginfo('url') ?>' + listing.url + '"> <img class="img-responsive" src="' + "http://img.seorets.com/<?php echo $seo_rets_plugin->feed->server_name ?>/" + listing.seo_url + "-" + listing.mls_id + "-1.jpg" + '"> </a></div> <div class="col-md-8 col-sm-8"> <div class="row"> <div class="col-md-12 col-sm-12"><a href="<?php bloginfo('url') ?>' + listing.url + '">' + listing.address + '</a></div> </div> <div class="row"> <div class="col-md-12"> $' + addCommas(listing.price) + ' - ' + listing.city + ', ' + listing.state + '</div> </div> ' + ((typeof listing.proj_name != 'undefined' && typeof listing.unit_number != 'undefined') ? ' <div class="row"> <div class="col-md-8">' + listing.proj_name + '</div> <div class="col-md-4">' + listing.unit_number + '</div> </div> ' : '') + ' <div class="row"> <div class="col-md-8 col-sm-8">Beds:</div> <div class="col-md-4 col-sm-4">' + listing.bedrooms + '</div> </div> <div class="row"> <div class="col-md-8 col-sm-8">Baths:</div> <div class="col-md-4 col-sm-4">' + listing.baths + '</div> </div> ' + ((typeof listing.waterview != 'undefined') ? ' <div class="row"> <div class="col-md-12">Waterview:</div></div><div class="row"><div class="col-md-12">' + listing.waterview + '</div></div>' : '') + '</div></div></div>');
-
-
-                            var position = new google.maps.LatLng(listing.lat, listing.lng);
-
-                            infos[n] = new google.maps.InfoWindow({
-                                content: '<table><tr><td><a target="_parent" href="<?php bloginfo('url') ?>' + listing.url + '"><img style="width:130px;height:86px;" src="http://img.seorets.com/<?php echo $seo_rets_plugin->feed->server_name?>/' + listing.seo_url + '-' + listing.mls_id + '-1.jpg" /' + '></a></td><td valign="top" style="padding-left:5px;"><strong><a target="_parent" href="<?php bloginfo('url') ?>' + listing.url + '">' + listing.address + '</a></strong><br /' + '>Price: $' + addCommas(listing.price) + '<br /' + '>Bedrooms: ' + listing.bedrooms + '<br /' + '>Baths: ' + listing.baths_full + '</td></tr></table>'
-                            });
-
-                            markers[n] = new google.maps.Marker({
-                                position: position,
-                                map: map,
-                                title: listing.address,
-                                icon: "<?php bloginfo('url') ?>/wp-content/plugins/seo-rets/resources/images/marker.png"
-                            });
-
-                            var clicked_index = n;
-
-                            google.maps.event.addListener(markers[n], 'click', (function (x) {
-                                return function () {
-                                    updating = true;
-                                    $(".listing").css("background-color", "#FFF");
-                                    close_infos();
-                                    infos[x].open(map, markers[x]);
-                                    var listings_el = $("#listings");
-                                    var listing_el = $(".listing:eq(" + x + ")");
-                                    listings_el.animate({
-                                        scrollTop: (listings_el.scrollTop() + listing_el.position().top) - ((listings_el.height() / 2) - (listing_el.height() / 2))
-                                    }, 1000, function () {
-                                        listing_el.css("background-color", "#EEE");
-                                        setTimeout(function () {
-                                            updating = false;
-                                        }, 1000);
+                            $("#listings").html("");
+//                        console.log(listings);
+                            for (var n = 0; n < listings.length; n++) {
+                                if (!listings[n]) {
+//                                n++;
+//                                        listings.length--;
+                                    markers[n] = new google.maps.Marker({
+                                        position: position,
+                                        map: map,
+                                        title: listing.address,
+                                        icon: "<?php bloginfo('url') ?>/wp-content/plugins/seo-rets/resources/images/marker.png"
                                     });
-                                };
-                            })(n));
-
-
-                            bounds.extend(position);
-                        }
-
-                        if (!inbounds) map.fitBounds(bounds);
-                        inbounds = false;
-                        $("#ajax-loader, #ajax-loader2").toggle();
-                        setTimeout(function () {
-                            updating = false;
-                        }, 1000);
-
-                    };
-
-                    var needs_geocoding = [];
-
-
-                    for (var n = 0; n < listings.length; n++) {
-                        if (((typeof listings[n].lat) == "undefined") || isNaN(listings[n].lat) || isNaN(listings[n].lng) || listings[n].lat == 0 || listings[n].lng == 0) {
-                            needs_geocoding.push({
-                                index: n,
-                                address: listings[n].address + " " + listings[n].city + ", " + listings[n].state
-                            });
-                        }
-                    }
-
-                    if (needs_geocoding.length > 0) {
-                        $.ajax({
-                            url: '<?php bloginfo('url') ?>/sr-ajax?action=geocode',
-                            type: 'post',
-                            data: {
-                                geocode: JSON.stringify(needs_geocoding)
-                            },
-                            success: function (response) {
-
-                                if (response !== null) {
-                                    for (var n = 0; n < response.geocode.length; n++) {
-                                        listings[response.geocode[n].index].lat = response.geocode[n].latitude;
-                                        listings[response.geocode[n].index].lng = response.geocode[n].longitude;
-                                    }
+                                    markers[n].setVisible(false);
+//                                        console.log('next #508');
                                 } else {
 
-                                    for (var n = 0; n < needs_geocoding.length; n++) {
-                                        delete listings[needs_geocoding[n].index];
-                                    }
+                                    var listing = listings[n];
 
-                                    listings = Object.keys(listings).map(function (v) {
-                                        return listings[v];
+                                    $("#listings").html($("#listings").html() + '<div class="sr-content" style="margin-top: 10px;"><div class="listing row" style="margin-left: 0px;margin-right:0px" onclick="zoom_to(' + n + ')"> <div class="col-md-4 col-sm-4"><a href="<?php bloginfo('url') ?>' + listing.url + '"> <img class="img-responsive" src="' + "http://img.seorets.com/<?php echo $seo_rets_plugin->feed->server_name ?>/" + listing.seo_url + "-" + listing.mls_id + "-1.jpg" + '"> </a></div> <div class="col-md-8 col-sm-8"> <div class="row"> <div class="col-md-12 col-sm-12"><a href="<?php bloginfo('url') ?>' + listing.url + '">' + listing.address + '</a></div> </div> <div class="row"> <div class="col-md-12"> $' + addCommas(listing.price) + ' - ' + listing.city + ', ' + listing.state + '</div> </div> ' + ((typeof listing.proj_name != 'undefined' && typeof listing.unit_number != 'undefined') ? ' <div class="row"> <div class="col-md-8">' + listing.proj_name + '</div> <div class="col-md-4">' + listing.unit_number + '</div> </div> ' : '') + ' <div class="row"> <div class="col-md-8 col-sm-8">Beds:</div> <div class="col-md-4 col-sm-4">' + listing.bedrooms + '</div> </div> <div class="row"> <div class="col-md-8 col-sm-8">Baths:</div> <div class="col-md-4 col-sm-4">' + listing.baths + '</div> </div> ' + ((typeof listing.waterview != 'undefined') ? ' <div class="row"> <div class="col-md-12">Waterview:</div></div><div class="row"><div class="col-md-12">' + listing.waterview + '</div></div>' : '') + '</div></div></div>');
+
+
+                                    var position = new google.maps.LatLng(listing.lat, listing.lng);
+
+                                    infos[n] = new google.maps.InfoWindow({
+                                        content: '<table><tr><td><a target="_parent" href="<?php bloginfo('url') ?>' + listing.url + '"><img style="width:130px;height:86px;" src="http://img.seorets.com/<?php echo $seo_rets_plugin->feed->server_name?>/' + listing.seo_url + '-' + listing.mls_id + '-1.jpg" /' + '></a></td><td valign="top" style="padding-left:5px;"><strong><a target="_parent" href="<?php bloginfo('url') ?>' + listing.url + '">' + listing.address + '</a></strong><br /' + '>Price: $' + addCommas(listing.price) + '<br /' + '>Bedrooms: ' + listing.bedrooms + '<br /' + '>Baths: ' + listing.baths_full + '</td></tr></table>'
                                     });
+
+                                    markers[n] = new google.maps.Marker({
+                                        position: position,
+                                        map: map,
+                                        title: listing.address,
+                                        icon: "<?php bloginfo('url') ?>/wp-content/plugins/seo-rets/resources/images/marker.png"
+                                    });
+//                                        console.log(markers.length + "#531");
+                                    var clicked_index = n;
+                                    google.maps.event.addListener(markers[n], 'click', (function (x) {
+                                        return function () {
+                                            updating = true;
+                                            $(".listing").css("background-color", "#FFF");
+                                            close_infos();
+                                            infos[x].open(map, markers[x]);
+                                            var listings_el = $("#listings");
+                                            var listing_el = $(".listing:eq(" + x + ")");
+                                            listings_el.animate({
+                                                scrollTop: (listings_el.scrollTop() + listing_el.position().top) - ((listings_el.height() / 2) - (listing_el.height() / 2))
+                                            }, 1000, function () {
+                                                listing_el.css("background-color", "#EEE");
+                                                setTimeout(function () {
+                                                    updating = false;
+                                                }, 1000);
+                                            });
+                                        };
+                                    })(n));
+
+
+                                    bounds.extend(position);
                                 }
-
-                                add_listings_to_map();
                             }
-                        });
-                    } else {
-                        add_listings_to_map();
-                    }
-                };
 
-                updating = true;
-                $("#ajax-loader, #ajax-loader2").toggle();
-                $.ajax({
-                    url: "<?php bloginfo('url') ?>/sr-ajax?action=map-search",
-                    type: "post",
-                    data: get_form_data(),
-                    success: function (data) {
-                        map_listings(data.result);
+                            if (!inbounds) map.fitBounds(bounds);
+                            inbounds = false;
+                            $("#ajax-loader, #ajax-loader2").toggle();
+                            setTimeout(function () {
+                                updating = false;
+                            }, 1000);
+
+                        };
+
+                        var needs_geocoding = [];
+
+
+                        for (var n = 0; n < listings.length; n++) {
+                            if (((typeof listings[n].lat) == "undefined") || listings[n].lat == " " || listings[n].lng == " " || isNaN(listings[n].lat) || isNaN(listings[n].lng) || listings[n].lat == 0 || listings[n].lng == 0) {
+//                                    console.log('need geocode #565');
+                                needs_geocoding.push({
+                                    index: n,
+                                    address: listings[n].address + " " + listings[n].city + " " + listings[n].state + " " + listings[n].zip
+                                });
+                            }
+                        }
+//                            console.log(needs_geocoding.length);
+//                            console.log(needs_geocoding);
+//                            console.log(listings.length);
+//                            console.log(listings);
+
+                        if (needs_geocoding.length > 0) {
+                            var geocoder = new google.maps.Geocoder();
+                            $.ajax({
+                                    url: '<?php bloginfo('url') ?>/sr-ajax?action=geocode',
+                                    type: 'post',
+                                    data: {
+                                        geocode: JSON.stringify(needs_geocoding)
+                                    },
+                                    success: function (response) {
+                                        console.log(response);
+                                        if (response !== null) {
+                                            var l = 0;
+                                            for (l; l < response.geocode.length; l++) {
+                                                if (response.geocode[l].latitude != null || response.geocode[l].longitude != null) {
+                                                    listings[response.geocode[l].index].lat = response.geocode[l].latitude;
+                                                    listings[response.geocode[l].index].lng = response.geocode[l].longitude;
+                                                } else {
+
+                                                    delete listings[needs_geocoding[l].index];
+//                                                    console.log(needs_geocoding[l].index);
+//                                                    console.log(listings.length);
+                                                }
+                                            }
+                                        } else {
+                                            for (var n = 0;
+                                                 n < needs_geocoding.length;
+                                                 n++
+                                            ) {
+                                                delete listings[needs_geocoding[n].index];
+                                            }
+
+                                            listings = Object.keys(listings).map(function (v) {
+                                                return listings[v];
+                                            });
+                                        }
+//                                            console.log(needs_geocoding.length);
+//                                            console.log(listings.length);
+//                                            console.log(listings);
+
+                                        add_listings_to_map();
+                                    }
+                                }
+                            )
+                            ;
+                        }
+                        else {
+                            add_listings_to_map();
+                        }
                     }
-                });
-            };
-//            $("#search-area select").change(update_map);
+
+                    updating = true;
+                    $("#ajax-loader, #ajax-loader2").toggle();
+                    $.ajax({
+                        url: "<?php bloginfo('url') ?>/sr-ajax?action=map-search",
+                        type: "post",
+                        data: get_form_data(),
+                        success: function (data) {
+                            map_listings(data.result);
+                        }
+                    });
+                }
+                ;
+            //            $("#search-area select").change(update_map);
             $("#search-area select").change(function () {
                 if (!polysearch) {
-                    console.log('CHANGE | 502');
+//                    console.log('CHANGE | 502');
                     update_map();
                 } else {
-                    console.log('CHANGE Else | 505');
+//                    console.log('CHANGE Else | 505');
                     searchInPolygon(poly);
                 }
             });
             google.maps.event.addListener(map, 'idle', function () {
                 if (!updating) {
                     //alert(map.getBounds());
-                    console.log('Listaner |513');
+//                    console.log('Listaner |513');
                     inbounds = true;
                     update_map();
                 }
@@ -636,7 +671,8 @@
             update_map();
 
 
-        });
+        })
+        ;
 
 
     </script>
@@ -644,12 +680,6 @@
     wp_enqueue_style('sr_templates_splitsearch', $this->css_resources_dir . 'templates/splitsearch.css');
     wp_print_styles(array('sr_templates_splitsearch'));
     ?>
-
-
-    <!--<div class="ribbon">-->
-    <!--	<h1 class="entry-title">Map Search</h1>-->
-    <!--</div>-->
-
     <div id="search-area" class="table-responsive respstyle">
         <div id="search-form">
 
@@ -912,7 +942,8 @@
 
         <!--        <div id="listings-container" class="col-md-12">-->
         <!--            <div id="listings"></div>-->
-        <!--            <img id="ajax-loader2" src="--><?php //echo $this->plugin_dir ?><!--resources/images/ajax2.gif"-->
+        <!--            <img id="ajax-loader2" src="-->
+        <?php //echo $this->plugin_dir ?><!--resources/images/ajax2.gif"-->
         <!--                 style="display:none;"/>-->
         <!--        </div>-->
 

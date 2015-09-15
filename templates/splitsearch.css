@@ -49,7 +49,6 @@
 textarea.form-control {
     height: auto
 }
-
 .form-control {
     border-color: #cfdadd;
     border-radius: 2px
@@ -67,12 +66,3 @@ textarea.form-control {
 .form-horizontal .control-label.text-left {
     text-align: left
 }
-
-#search-area label {
-    float: left;
-}
-
-.disp-none {
-    display: none;
-}
-

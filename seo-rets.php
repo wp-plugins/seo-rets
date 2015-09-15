@@ -3,7 +3,7 @@
 Plugin Name: SEO RETS
 Plugin URI: http://seorets.com
 Description: Convert your RETS/IDX feed into an SEO friendly real estate portal
-Version: 3.3.43
+Version: 3.3.44
 Author: SEO RETS, LLC
 Author URI: http://seorets.com
 */
@@ -19,6 +19,7 @@ class SEO_RETS_Plugin
     {
         $this->api_host = 'api.seorets.com';
         $this->feed = get_option('sr_feed');
+        $this->boot = get_option('sr_boot');
         $this->mlsid_cache_array = array();
         $this->api_version = '2.3.6';
         $this->api_url = "http://" . $this->api_host . "/v" . $this->api_version;
@@ -108,13 +109,7 @@ wp_enqueue_style('sr-css');
 wp_register_style('sr-contact', '{$this->plugin_dir}resources/css/contact.css');
 wp_enqueue_style('sr-contact');
 
-wp_register_style('sr-bootstrap-css', '{$this->plugin_dir}resources/bootstrap/css/bootstrap.min.css');
-wp_register_style('sr-bootstrap-theme-css', '{$this->plugin_dir}resources/bootstrap/css/bootstrap-theme.min.css');
-wp_register_script('sr-bootstrap-js', '{$this->plugin_dir}resources/bootstrap/js/bootstrap.min.js', array('jquery'));
 
-wp_enqueue_style('sr-bootstrap-css');
-wp_enqueue_style('sr-bootstrap-theme-css');
-wp_enqueue_script('sr-bootstrap-js');
 
 wp_register_style('sr-mp-css', '{$this->plugin_dir}resources/css/mp-style.css');
 wp_enqueue_style('sr-mp-css');
@@ -145,7 +140,20 @@ wp_enqueue_script('sr-magnific-popup');
 wp_enqueue_script('thickbox');
 wp_enqueue_script('jquery');
 ");
+        $enqueue_scripts_boot = create_function('', "
+// This css contains all of the rules for any html the plugin outputs
+wp_register_style('sr-bootstrap-css', '{$this->plugin_dir}resources/bootstrap/css/bootstrap.min.css');
+wp_register_style('sr-bootstrap-theme-css', '{$this->plugin_dir}resources/bootstrap/css/bootstrap-theme.min.css');
+wp_register_script('sr-bootstrap-js', '{$this->plugin_dir}resources/bootstrap/js/bootstrap.min.js', array('jquery'));
 
+wp_enqueue_style('sr-bootstrap-css');
+wp_enqueue_style('sr-bootstrap-theme-css');
+wp_enqueue_script('sr-bootstrap-js');
+");
+        if ($this->boot == "true") {
+//            print_r($this->boot);
+            add_action('wp_enqueue_scripts', $enqueue_scripts_boot);
+        }
         add_action('wp_enqueue_scripts', $enqueue_scripts);
         add_action('admin_enqueue_scripts', $enqueue_scripts_admin);
 
@@ -276,6 +284,9 @@ $wp_rewrite->flush_rules();
 
     public function activate()
     {
+        if (!isset($this->boot) || $this->boot == "") {
+            update_option("sr_boot", 'true');
+        }
         if (wp_next_scheduled('sr_purge_transients') === false) {
             wp_schedule_event(current_time('timestamp'), 'daily', 'sr_purge_transients');
         }
@@ -605,7 +616,8 @@ $wp_rewrite->flush_rules();
                 jQuery("#sr-popup-form").fadeOut("slow", function () {
                     sr_popup.fadeOut("slow");
                 });
-            };
+            }
+            ;
             var sizeFrame = function sizeFrame() {
                 var F = document.getElementById("sr-popup-frame");
                 var F2 = document.getElementById("sr-popup2");
@@ -613,11 +625,9 @@ $wp_rewrite->flush_rules();
                 var constantHeight = 40;
 
                 if (F.contentDocument) {
-
                     value = F.contentDocument.documentElement.scrollHeight + constantHeight; //FF 3.0.11, Opera 9.63, and Chrome
                 } else {
                     value = F.contentWindow.document.body.scrollHeight + constantHeight; //IE6, IE7 and Chrome
-
                 }
                 if (value == '' || value < 220) {
                     return false;
@@ -631,18 +641,14 @@ $wp_rewrite->flush_rules();
                 }
                 F.contentDocument.documentElement.scrollHeight = parseInt(F.height);
                 F.contentWindow.document.body.scrollHeight = parseInt(F.height);
-//                jQuery("#sr-popup-frame").height(parseInt(F.height));
-//                document.getElementById('#sr-popup-frame').contentWindow.document.body.offsetHeight + 'px';
-                jQuery("#sr-popup-frame").css('height', parseInt(F.height));
+                jQuery("#sr-popup-frame").height(parseInt(F.height));
+                document.getElementById('#sr-popup-frame').contentWindow.document.body.offsetHeight + 'px';
+//                jQuery("#sr-popup-frame").css('height', parseInt(F.height));
 //                jQuery("#sr-popup-frame").css('width', parseInt(F2.width));
 //                jQuery("#sr-popup2").css('height', parseInt(F.height));
                 return true;
 
             }
-            jQuery(window).resize(function () {
-                window.callAmount = 0;
-                sizeFrame();
-            });
             var callAmount = 0;
             var callSizeFrame = function callSizeFrame() {
                 var iframeLoadFlag;
@@ -653,33 +659,32 @@ $wp_rewrite->flush_rules();
                 }
             }
             jQuery(function ($) {
-//                htm = '<div style="text-align:center;" id="sr-popup2" class="zoom-anim-dialog"><iframe id="sr-popup-frame" border="0" style="border:0;width:100%" src="<?php //echo home_url() ?>///sr-contact"></iframe></div>';
-
                 closeButton = false;
-                if (<?php echo  (isset($this->popup_options['force']) && $this->popup_options['force'] != "enabled") ? "true" : "false" ?>) {
+                markFrame = '<div style="text-align:center;" id="sr-popup2" class="zoom-anim-dialog">' +
+                    '<iframe class="mfp-iframe" id="sr-popup-frame" allowfullscreen style="border:0;width:100%" frameborder="0"></iframe>' +
+                    '</div>';
+                if (<?php if($this->popup_options['force'] == "enabled") { echo "true"; } else { echo "false"; }?>) {
+                    markFrame = '<div style="text-align:center;" id="sr-popup2" class="zoom-anim-dialog"><div class="mfp-close"></div>' +
+                        '<iframe class="mfp-iframe" id="sr-popup-frame" allowfullscreen style="border:0;width:100%" frameborder="0"></iframe>' +
+                        '</div>';
                     closeButton = true;
                 }
+                <!--                -->
+                <?// var_dump($this->popup_options['force']); ?>
 
                 htm = '<?php echo get_bloginfo('url') ;?>/sr-contact';
 
                 jQuery.magnificPopup.open({
-//                    items: {
-//                        src: '<?php //echo get_bloginfo('url') ;?>///sr-contact',
-//                        type: 'ajax'
-//                    },
                     items: {
                         src: htm,
                         type: 'iframe'
                     },
                     iframe: {
-                        markup: '<div style="text-align:center;" id="sr-popup2" class="zoom-anim-dialog">' +
-                        '<iframe class="mfp-iframe" id="sr-popup-frame" allowfullscreen style="border:0;width:100%" frameborder="0"></iframe>' +
-                        '</div>',
+                        markup: markFrame
 
                     },
                     fixedContentPos: true,
                     fixedBgPos: true,
-//                    modal: true,
                     overflowY: 'auto',
                     showCloseBtn: closeButton,
                     closeBtnInside: closeButton,
@@ -691,25 +696,8 @@ $wp_rewrite->flush_rules();
                     mainClass: 'my-mfp-zoom-in'
                 });
                 callSizeFrame();
-
-//                var htm = '<div id="sr-popup" style="display:none;"><div id="sr-popup-form" style="display:none;">';
-//                if (<?php //echo  (isset($this->popup_options['force']) && $this->popup_options['force'] != "enabled") ? "true" : "false" ?>//) {
-//                    htm += '<a href="javascript: void(0);"><img src="<?php //echo $this->plugin_dir?>///resources/images/close.png" id="sr-popup-close" /></a>';
-//                }
-//                htm += '<iframe id="sr-popup-frame" border="0" style="border:0;" src="<?php //echo home_url() ?>///sr-contact"></iframe></div></div>'
-//                jQuery("body").append(htm);
-//                sr_popup = jQuery("#sr-popup");
-//                sr_popup.fadeIn("slow", function () {
-//                    jQuery("#sr-popup-form").fadeIn("slow");
-//                });
-//                jQuery("#sr-popup-close").click(close_popup);
-//                jQuery(window).resize();
-
-
             });
         </script>
-
-
         <?php
     }
 
@@ -1161,7 +1149,7 @@ END SESSION STUFF
         $currentPage->post_type = "page";
 
         $method = $wp_query->query['sr_method'];
-        $listAllowedMehods = array('details', 'overview', 'search','alerts',
+        $listAllowedMehods = array('details', 'overview', 'search', 'alerts',
             'customsearch', 'mapsearch', 'subscribe', 'signup', 'forgot', 'login', 'logout', 'reset', 'favorites', 'verify');
 
         if (!in_array($method, $listAllowedMehods)) {
