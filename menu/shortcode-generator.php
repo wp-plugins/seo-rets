@@ -618,10 +618,10 @@ $plugin_id = $sr->admin_id;
                     console.log(response);
                     var htmResponse = '';
                     for (var i = 0; i <= response.length - 1; i++) {
-                        htmResponse = htmResponse + "<div class='row listscode'><div class='col-6-left'>" + response[i]["shortcode"]
-                            + "</div></div>";
+                        htmResponse = htmResponse + "<div class='row listscode'><div class='col-6-left'>" + response[i]
+                            + "</div><div class='col-3-left'><a data-shortcode='" + response[i] + "' class='deleteShortcode' href=''>Delete</a></div></div>";
                     }
-                    jQuery('#sr-popup2').html(htmResponse);
+                    jQuery('.shortList').html(htmResponse);
 
                 }
             });
@@ -637,29 +637,31 @@ $plugin_id = $sr->admin_id;
                 success: function (response) {
                     console.log(response);
                     var htmResponse = '';
-                    for (var i = 0; i <= response.length - 1; i++) {
-                        htmResponse = htmResponse + "<div class='row listscode'><div class='col-6-left'>" + response[i]["shortcode"]
-                            + "</div></div>";
+                    if (response != null) {
+                        for (var i = 0; i <= response.length - 1; i++) {
+                            htmResponse = htmResponse + "<div class='shortList'><div class='row listscode'><div class='col-6-left'>" + response[i]
+                                + "</div><div class='col-3-left'><a data-shortcode='" + response[i] + "' class='deleteShortcode' href=''>Delete</a></div></div></div>";
+                        }
+                        var htm = '<div id="sr-popup2" class="zoom-anim-dialog">' + htmResponse + '</div>';
+                        jQuery.magnificPopup.open({
+                            items: {
+                                src: htm,
+                                type: 'inline'
+                            },
+                            fixedContentPos: false,
+                            fixedBgPos: true,
+
+                            overflowY: 'auto',
+
+                            closeBtnInside: true,
+                            preloader: false,
+
+                            midClick: true,
+                            closeOnBgClick: false,
+                            removalDelay: 300,
+                            mainClass: 'my-mfp-zoom-in'
+                        });
                     }
-                    var htm = '<div id="sr-popup2" class="zoom-anim-dialog">' + htmResponse + '</div>';
-                    jQuery.magnificPopup.open({
-                        items: {
-                            src: htm,
-                            type: 'inline'
-                        },
-                        fixedContentPos: false,
-                        fixedBgPos: true,
-
-                        overflowY: 'auto',
-
-                        closeBtnInside: true,
-                        preloader: false,
-
-                        midClick: true,
-                        closeOnBgClick: false,
-                        removalDelay: 300,
-                        mainClass: 'my-mfp-zoom-in'
-                    });
                 }
             });
         });

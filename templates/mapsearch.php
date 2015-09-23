@@ -940,12 +940,6 @@
 
         </div>
 
-        <!--        <div id="listings-container" class="col-md-12">-->
-        <!--            <div id="listings"></div>-->
-        <!--            <img id="ajax-loader2" src="-->
-        <?php //echo $this->plugin_dir ?><!--resources/images/ajax2.gif"-->
-        <!--                 style="display:none;"/>-->
-        <!--        </div>-->
 
         <div class="col-md-12">
             <div id="map-container">
@@ -954,6 +948,14 @@
                         src="<?php echo $this->plugin_dir ?>resources/images/ajax.gif"/></div>
             </div>
         </div>
+        <? if($_SERVER['REQUEST_URI'] == '/sr-mapsearch/'){ ?>
+        <div id="listings-container" class="col-md-12">
+            <div id="listings"></div>
+            <img id="ajax-loader2" src="
+        <?php echo $this->plugin_dir ?>resources/images/ajax2.gif"
+                 style="display:none;"/>
+        </div>
+        <? } ?>
         <div style="clear:both;"></div>
         <!--        <p>Powered By <a href="http://seorets.com/" target="_blank">SEO RETS</a></p>-->
 

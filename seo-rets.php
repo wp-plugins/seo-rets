@@ -3,7 +3,7 @@
 Plugin Name: SEO RETS
 Plugin URI: http://seorets.com
 Description: Convert your RETS/IDX feed into an SEO friendly real estate portal
-Version: 3.3.46
+Version: 3.3.47
 Author: SEO RETS, LLC
 Author URI: http://seorets.com
 */
@@ -76,6 +76,75 @@ class SEO_RETS_Plugin
             update_option("sr_boot", 'true');
         }
         $this->start_session();
+        if (get_option('sr-shortcode') != "") {
+            add_action('media_buttons_context', 'add_my_custom_button');
+            add_action('admin_footer', 'add_inline_popup_content');
+        }
+
+//action to add a custom button to the content editor
+        function add_my_custom_button($context)
+        {
+
+            //path to my icon
+//            $img = plugins_url('penguin.png', __FILE__);
+
+            //the id of the container I want to show in the popup
+            $container_id = 'popup_container';
+
+            //our popup's title
+            $title = 'Insert SEO RETS shortcode';
+            $ico = plugins_url('resources/images/icon.png', __FILE__);
+//            $ico = "{$this->plugin_dir}resources/images/icon.png";
+
+            //append the icon
+//            $context .= "<a class='thickbox' title='{$title}' href='#TB_inline?width=400&inlineId={$container_id}'> <img src='{$img}' /></a>";
+            $context .= "<a class='thickbox button' title='{$title}' href='#TB_inline?width=400&inlineId={$container_id}' id='insert-my-media'><img src='{$ico}' alt=''>Insert SEO RETS shortcode</a>";
+//            $context .= "<button class='button' title='{$title}' data-editor='popup_container' id='insert-my-media'><img src='{$ico}' alt=''>Insert SEO RETS shortcode</button>";
+
+
+            return $context;
+        }
+
+        function add_inline_popup_content()
+        {
+            ?>
+
+            <div id="popup_container" style="display:none;">
+                <h2>Chose Shortcode to insert in the post</h2>
+                <script>
+                    jQuery(document).ready(function () {
+                        jQuery('.clickToInertA').click(function (e) {
+                            e.preventDefault();
+                            wp.media.editor.insert(jQuery(this).attr('href'));
+                        });
+                    });
+                </script>
+                <?
+                $shortcode = get_option('sr-shortcode');
+
+                $response = array_reduce($shortcode, function ($a, $b) {
+                    static $stored = array();
+
+                    $hash = md5(serialize($b));
+
+                    if (!in_array($hash, $stored)) {
+                        $stored[] = $hash;
+                        $a[] = $b;
+                    }
+
+                    return $a;
+                }, array());
+                echo '<table>';
+                foreach ($response as $val) {
+                    echo "<tr style='margin-top: 10px' ><td style='padding: 10px; border-bottom: 1px solid #cccccc'><span style='float: left'>" . base64_decode($val) . "</span></td><td style='padding: 10px; width: 100px;border-bottom: 1px solid #cccccc'><a style='float:right' href='" . base64_decode($val) . "' class='clickToInertA'>Click To Inert</a></td></tr>";
+                }
+                echo '</table>';
+
+                ?>
+
+            </div>
+            <?php
+        }
 
         add_action("sr_purge_transients", array("SEO_RETS_Plugin", "purge_expired_transients"));
 
@@ -1680,7 +1749,9 @@ END SESSION STUFF
             add_submenu_page($this->admin_id, $this->admin_title . ' :: Developer Tools', 'Developer Tools', 'activate_plugins', $this->admin_id . '-tools', create_function('', '
 				global $seo_rets_plugin; include("menu/developer-tools.php");
 			'));
-
+            add_submenu_page($this->admin_id, $this->admin_title . ' :: Shortcode Generator', 'Shortcode Generator', 'activate_plugins', $this->admin_id . '-shortcode', create_function('', '
+				global $seo_rets_plugin; include("menu/shortcode-generator.php");
+			'));
             add_submenu_page($this->admin_id, $this->admin_title . ' :: Listing Prioritization', 'Listing Prioritization', 'activate_plugins', $this->admin_id . '-prioritization', create_function('', '
 				global $seo_rets_plugin; include("menu/listing-prioritization.php");
 			'));
