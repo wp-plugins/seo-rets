@@ -48,7 +48,7 @@ You can create page with market statistics with help of [sr-market] shortcode.
 == Changelog ==
 = 3.3.47 =
 * On /sr-mapsearch/ page now showing listings under the map
-* Add new function "Shortcode Generator(beta)", With this feature you can create shortcodes with multiple parameters and immediately see the number of listings you will be able to save the generated shortcode or just copy to the desired page. In the page editor, we have added the button, clicking on which you will be able to choose your desired shortcode and in one click insert it into's the page.
+* Add new function "Shortcode Generator(beta)", With this feature you can create shortcodes with multiple parameters and immediately see the number of listings. You will be able to save the generated shortcode or just copy to the desired page. In the page editor, we have added the button, clicking on which you will be able to choose your desired shortcode and in one click insert it into's the page.
 * Fix some bug.
 * Fix makeup style.
 * More responsive makeup.
