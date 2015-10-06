@@ -3,7 +3,7 @@
 Plugin Name: SEO RETS
 Plugin URI: http://seorets.com
 Description: Convert your RETS/IDX feed into an SEO friendly real estate portal
-Version: 3.3.47
+Version: 3.3.48
 Author: SEO RETS, LLC
 Author URI: http://seorets.com
 */
@@ -713,7 +713,7 @@ $wp_rewrite->flush_rules();
                 F.contentDocument.documentElement.scrollHeight = parseInt(F.height);
                 F.contentWindow.document.body.scrollHeight = parseInt(F.height);
                 jQuery("#sr-popup-frame").height(parseInt(F.height));
-                document.getElementById('#sr-popup-frame').contentWindow.document.body.offsetHeight + 'px';
+//                document.getElementById('#sr-popup-frame').contentWindow.document.body.offsetHeight + 'px';
 //                jQuery("#sr-popup-frame").css('height', parseInt(F.height));
 //                jQuery("#sr-popup-frame").css('width', parseInt(F2.width));
 //                jQuery("#sr-popup2").css('height', parseInt(F.height));
@@ -730,15 +730,18 @@ $wp_rewrite->flush_rules();
                 }
             }
             jQuery(function ($) {
-                closeButton = false;
-                markFrame = '<div style="text-align:center;" id="sr-popup2" class="zoom-anim-dialog">' +
-                    '<iframe class="mfp-iframe" id="sr-popup-frame" allowfullscreen style="border:0;width:100%" frameborder="0"></iframe>' +
-                    '</div>';
+                closeButton = true;
+
                 if (<?php if($this->popup_options['force'] == "enabled") { echo "true"; } else { echo "false"; }?>) {
-                    markFrame = '<div style="text-align:center;" id="sr-popup2" class="zoom-anim-dialog"><div class="mfp-close"></div>' +
+                    markFrame = '<div style="text-align:center;" id="sr-popup2" class="zoom-anim-dialog">' +
                         '<iframe class="mfp-iframe" id="sr-popup-frame" allowfullscreen style="border:0;width:100%" frameborder="0"></iframe>' +
                         '</div>';
-                    closeButton = true;
+//                    closeButton = false;
+                } else {
+                    markFrame = '<div style="text-align:center;" id="sr-popup2" class="zoom-anim-dialog"><div id="container">' +
+                        '<iframe class="mfp-iframe" id="sr-popup-frame" allowfullscreen style="border:0;width:100%" frameborder="0"></iframe>' +
+                        '</div><div class="mfp-close"></div></div>';
+
                 }
                 <!--                -->
                 <?// var_dump($this->popup_options['force']); ?>

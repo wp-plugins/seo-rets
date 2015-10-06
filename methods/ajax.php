@@ -307,6 +307,13 @@ switch ($_GET['action']) {
             sort($subdivision);
             $response = $subdivision;
         }
+        if (isset($_POST['subt'])) {
+            $response = $_POST['subt'];
+
+            $sub_types = $sr->metadata->$_POST['subt']->fields->sub_type->values;
+            sort($sub_types);
+            $response = $sub_types;
+        }
         break;
     case "get-listings-amount":
         $get_vars = json_decode(base64_decode($_GET['conditions']));

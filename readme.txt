@@ -4,7 +4,7 @@ Donate link:
 Tags: RETS, IDX, SEORETS, Real estate, SEO
 Requires at least: 3.0.1
 Tested up to: 4.3
-Stable tag: 3.3.47
+Stable tag: 3.3.48
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,6 +46,12 @@ You can create page with market statistics with help of [sr-market] shortcode.
 3. Feed Information
 
 == Changelog ==
+= 3.3.48 =
+* Fix bug in lead popup form.
+* Fix makeup style.
+* New parameters in advanced search.
+* Advanced search in the selected collections. [sr-search type="advanced" coll="Your collection name"]
+
 = 3.3.47 =
 * On /sr-mapsearch/ page now showing listings under the map
 * Add new function "Shortcode Generator(beta)", With this feature you can create shortcodes with multiple parameters and immediately see the number of listings. You will be able to save the generated shortcode or just copy to the desired page. In the page editor, we have added the button, clicking on which you will be able to choose your desired shortcode and in one click insert it into's the page.

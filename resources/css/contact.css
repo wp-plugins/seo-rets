@@ -423,6 +423,17 @@ textarea.form-control {
 }
 .left-border-line label {
     font-weight: 300;
-    line-height: 35px;
+    /*line-height: 35px;*/
     font-size: 13px;
+}
+.ul__features {
+    list-style: none;
+    margin-top: 0!important;
+
+}
+.ul__features li {
+    /*float: left;*/
+    list-style-type: none!important;
+    list-style: none!important;
+    padding: 0px 10px;
 }

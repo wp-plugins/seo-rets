@@ -206,7 +206,11 @@ if(window.seorets===undefined){
 				if(void 0===a)var a=jQuery(".sr-formsection");
 				else"string"==typeof a&&(a=jQuery(a));
 				var d = [function(r) {r.find(".sr-submit").click(function() {
-					window.location = seorets.options.blogurl + "/sr-search?" + rtrim(seorets.base64encode(JSON.stringify(seorets.getFormRequest(r))))
+					window.open(
+						seorets.options.blogurl + "/sr-search?" + rtrim(seorets.base64encode(JSON.stringify(seorets.getFormRequest(r)))),
+						'_blank' // <- This is what makes it open in a new window.
+					);
+					//window.location = seorets.options.blogurl + "/sr-search?" + rtrim(seorets.base64encode(JSON.stringify(seorets.getFormRequest(r))))
 					})}];
 				var c=typeof b;
 				if(c=="function")

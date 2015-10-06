@@ -25,7 +25,6 @@ class SEO_Rets_Search_Widget extends WP_Widget {
 		
    ?>
 		<h3 class="widget-title"><?php echo isset($instance['title'])?$instance['title']:""?></h3>
-		<?php echo do_shortcode("[sr-search type=\"script\"]");?>
 		<script type="text/javascript">
 		(function(){
 			var m = (function(){var s=document.getElementsByTagName('script');return s[s.length-1];})();
@@ -34,11 +33,12 @@ class SEO_Rets_Search_Widget extends WP_Widget {
 			});
 		})();</script>
 		<div class="sr-formsection" sroperator="AND" srtype="<?php echo $instance['type']?>">
-			<table style="width:100%;">
-				<tr>
-					<td>City:</td>
-					<td>
-						<select style="width: 100%;" class="sr-formelement" srfield="city" sroperator="=">
+		<div class="row margin-top-10">
+		<div class="col-md-4 col-sm-4">
+		<label for="">City:</label>
+</div>
+<div class="col-md-8 col-sm-8">
+<select  class="sr-formelement form-control" srfield="city" sroperator="=">
 							<option value=''>All</option>
 							<?php
 								foreach ($cities as $city) {
@@ -46,33 +46,63 @@ class SEO_Rets_Search_Widget extends WP_Widget {
 								}
 							?>
 						</select>
-					</td>
-				</tr>
-				<tr>
-					<td>Min Beds: </td>
-					<td><input type="text" class="sr-formelement" srtype="numeric" srfield="bedrooms" sroperator=">=" value="<?php echo $instance['defaults_minbeds']?>" /></td>
-				</tr>
-				<tr>
-					<td>Min Baths: </td>
-					<td><input type="text" class="sr-formelement" srtype="numeric" srfield="baths" sroperator=">=" value="<?php echo $instance['defaults_minbaths']?>" /></td>
-				</tr>
-				<tr>
-					<td>Min Price: </td>
-					<td><input type="text" class="sr-formelement" srtype="numeric" srfield="price" sroperator=">=" value="<?php echo $instance['defaults_minprice']?>" /></td>
-				</tr>
-				<tr>
-					<td>Max Price: </td>
-					<td><input type="text" class="sr-formelement" srtype="numeric" srfield="price" sroperator="<=" value="<?php echo $instance['defaults_maxprice']?>" /></td>
-				</tr>
-				<tr>
-					<td>MLS #: </td>
-					<td><input type="text" class="sr-formelement" srfield="mls_id" sroperator="=" value="<?php echo $instance['defaults_mls']?>" onchange="this.value=jQuery.trim(this.value);" /></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td><input type="submit" class="sr-submit" value="Search" /></td>
-				</tr>
-			</table>
+</div>
+</div>
+		<div class="row margin-top-10">
+		<div class="col-md-4 col-sm-4">
+		<label for="">Min Beds:</label>
+</div>
+<div class="col-md-8 col-sm-8">
+					<input type="text" class="sr-formelement form-control" srtype="numeric" srfield="bedrooms" sroperator=">=" value="<?php echo $instance['defaults_minbeds']?>" />
+
+</div>
+</div>
+		<div class="row margin-top-10">
+		<div class="col-md-4 col-sm-4">
+		<label for="">Min Baths:</label>
+</div>
+<div class="col-md-8 col-sm-8">
+					<input type="text" class="sr-formelement form-control" srtype="numeric" srfield="baths" sroperator=">=" value="<?php echo $instance['defaults_minbaths']?>" />
+
+</div>
+</div>
+		<div class="row margin-top-10">
+		<div class="col-md-4 col-sm-4">
+		<label for="">Min Price:</label>
+</div>
+<div class="col-md8 col-sm-8">
+<input type="text" class="sr-formelement form-control" srtype="numeric" srfield="price" sroperator=">=" value="<?php echo $instance['defaults_minprice']?>" />
+
+</div>
+</div>
+		<div class="row margin-top-10">
+		<div class="col-md-4 col-sm-4">
+		<label for="">Max Price:</label>
+</div>
+<div class="col-md-8 col-sm-8">
+<input type="text" class="sr-formelement form-control" srtype="numeric" srfield="price" sroperator="<=" value="<?php echo $instance['defaults_maxprice']?>" />
+
+</div>
+</div>
+		<div class="row margin-top-10">
+		<div class="col-md-4 col-sm-4">
+		<label for="">MLS #:</label>
+</div>
+<div class="col-md-8 col-sm-8">
+					<input type="text" class="sr-formelement form-control" srfield="mls_id" sroperator="=" value="<?php echo $instance['defaults_mls']?>" onchange="this.value=jQuery.trim(this.value);" />
+
+</div>
+</div>
+		<div class="row margin-top-10">
+		<div class="col-md-4 col-sm-4">
+		<label for=""></label>
+</div>
+<div class="col-md-8 col-sm-8">
+					<input type="submit" class="sr-submit" value="Search" />
+
+</div>
+</div>
+
 			<?php if (isset($instance['sorting']) && !empty($instance['sorting'])):?>
 			<input type="hidden" class="sr-order" srfield="price" srdirection="<?php echo $instance['sorting']?>" />
 			<?php endif;?>

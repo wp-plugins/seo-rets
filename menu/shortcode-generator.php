@@ -689,7 +689,7 @@ $plugin_id = $sr->admin_id;
 <div class="wrap">
     <div id="icon-tools" class="icon32"></div>
     <h2><?php echo $plugin_title ?> :: Shortcode Generator<sup>
-            <small><i>(beta)</i></small>
+            <small><i>(beta v-0.1.3)</i></small>
         </sup></h2>
 
 
