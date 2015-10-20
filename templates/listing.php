@@ -64,7 +64,7 @@ wp_print_styles(array('sr_templates_listing'));
                         src:'<?php echo get_bloginfo('url') . '/sr-alert?mls_id=' . urlencode($l->mls_id) . '&type=' . urlencode($wp_query->query['sr_type']) . '&address=' . urlencode($l->address) . '&city=' . urlencode($l->city) . '&state=' . urlencode($l->state) . '&zip=' . urlencode($l->zip) ?>',
                         type: 'ajax'
                     },
-                    fixedContentPos: false,
+                    fixedContentPos: true,
                     fixedBgPos: true,
 
                     overflowY: 'auto',

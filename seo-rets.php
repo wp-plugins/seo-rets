@@ -3,7 +3,7 @@
 Plugin Name: SEO RETS
 Plugin URI: http://seorets.com
 Description: Convert your RETS/IDX feed into an SEO friendly real estate portal
-Version: 3.3.48
+Version: 3.3.51
 Author: SEO RETS, LLC
 Author URI: http://seorets.com
 */
@@ -20,6 +20,8 @@ class SEO_RETS_Plugin
         $this->api_host = 'api.seorets.com';
         $this->feed = get_option('sr_feed');
         $this->boot = get_option('sr_boot');
+        $this->sortO = get_option('sr_listingsOrder');
+        $this->show_features = get_option('sr_show_features');
         $this->mlsid_cache_array = array();
         $this->api_version = '2.3.6';
         $this->api_url = "http://" . $this->api_host . "/v" . $this->api_version;
@@ -61,7 +63,6 @@ class SEO_RETS_Plugin
             "sr-market"
         );
 
-
         register_activation_hook(__FILE__, array($this, 'activate'));
         register_deactivation_hook(__FILE__, array($this, 'deactivate'));
         register_uninstall_hook(__FILE__, array("SEO_RETS_Plugin", 'uninstall')); //This has to be static
@@ -74,6 +75,12 @@ class SEO_RETS_Plugin
         }
         if ($this->boot == "") {
             update_option("sr_boot", 'true');
+        }
+        if ($this->show_features == "") {
+            update_option("sr_show_features", 'false');
+        }
+        if (empty($this->sortO)) {
+            update_option('sr_listingsOrder', 'none');
         }
         $this->start_session();
         if (get_option('sr-shortcode') != "") {
@@ -180,8 +187,6 @@ wp_enqueue_style('sr-css');
 wp_register_style('sr-contact', '{$this->plugin_dir}resources/css/contact.css');
 wp_enqueue_style('sr-contact');
 
-
-
 wp_register_style('sr-mp-css', '{$this->plugin_dir}resources/css/mp-style.css');
 wp_enqueue_style('sr-mp-css');
 
@@ -189,12 +194,9 @@ wp_register_style('sr-magnific-popup', '{$this->plugin_dir}resources/css/magnifi
 wp_register_script('sr-magnific-popup', '{$this->plugin_dir}resources/js/jquery.magnific-popup.min.js', array('jquery'));
 wp_enqueue_style('sr-magnific-popup');
 wp_enqueue_script('sr-magnific-popup');
-//
+
 wp_register_script('sr-lazyload', '{$this->plugin_dir}resources/js/jquery.lazyload.min.js', array('jquery'));
 wp_enqueue_script('sr-lazyload');
-
-
-
 
 wp_enqueue_script('jquery');
 ");
@@ -202,12 +204,15 @@ wp_enqueue_script('jquery');
 // This css contains all of the rules for any html the plugin outputs
 wp_register_style('sr-css', '/sr-css');
 wp_enqueue_style('sr-css');
+
 wp_register_style('sr-contact', '{$this->plugin_dir}resources/css/contact.css');
 wp_enqueue_style('sr-contact');
+
 wp_register_style('sr-magnific-popup', '{$this->plugin_dir}resources/css/magnific-popup.css');
 wp_register_script('sr-magnific-popup', '{$this->plugin_dir}resources/js/jquery.magnific-popup.min.js', array('jquery'));
 wp_enqueue_style('sr-magnific-popup');
 wp_enqueue_script('sr-magnific-popup');
+
 wp_enqueue_script('thickbox');
 wp_enqueue_script('jquery');
 ");
@@ -270,8 +275,46 @@ $wp_rewrite->flush_rules();
             $this->admin_id = 'seo-rets';
             $this->admin_title = 'SEO RETS';
         }
+        wp_register_script('sr_seorets-min', $this->js_resources_dir . 'seorets.min.js');
+        add_action('sr-template-redirect', array(__CLASS__, 'postFilterHook'));
 
-        wp_register_script('sr_seorets-min', $this->js_resources_dir . 'seorets.min.js', array('jquery'));
+    }
+
+    public function postFilterHook()
+    {
+
+        add_action('template_redirect', array(__CLASS__, 'postFilterRedirect'));
+    }
+
+    public function postFilterRedirect()
+    {
+        global $wp_query;
+        $themeDir = dirname(TEMPLATEPATH) . '/' . get_stylesheet() . '/';
+        $templates = get_option('sr_template');
+        $method = $wp_query->query['sr_method'];
+        $arraySystemMethodToOption = array(
+            'favorites' => 'User Favorites',
+            'details' => 'Listing Details',
+            'forgot' => 'Forgot Password',
+            'login' => 'User Login',
+            'reset' => 'Password Reset',
+            'signup' => 'User Signup',
+            'search' => 'Search',
+            'subscribe' => 'Email Subscribe',
+            'verify' => 'Verify User'
+        );
+
+        $templateFile = '';
+        if ($templates['type'] == 'all') {
+            $templateFile = $templates['all-value'];
+
+        } elseif ($templates['type'] == 'every') {
+            $templateFile = $templates['every-values'][$arraySystemMethodToOption[$method]];
+        }
+        if (!empty($templateFile)) {
+            include($themeDir . $templateFile);
+            exit;
+        }
     }
 
     private function loadTinyMce()
@@ -1133,8 +1176,7 @@ END SESSION STUFF
         $wpdb->query($sql);
     }
 
-    public
-    function get_rewrites()
+    public function get_rewrites()
     {
         if (!$this->api_key) {
             return array();
@@ -1182,8 +1224,7 @@ END SESSION STUFF
         return $rules;
     }
 
-    public
-    function posts_filter($posts)
+    public function posts_filter($posts)
     {
         global $wp_query;
         if (!isset($wp_query->query['sr_method'])) return $posts;
@@ -1241,7 +1282,7 @@ END SESSION STUFF
                 include($method_loc);
             }
         }
-
+        do_action('sr-template-redirect');
         return array($currentPage);
     }
 
@@ -1804,6 +1845,23 @@ END SESSION STUFF
 
     public function api_request($method, $parameters = null, $allowcache = true, $save = true)
     {
+        if (get_option('sr_listingsOrder') != "none") {
+            $order = "none";
+
+            if (get_option('sr_listingsOrder') == 'heightolow') {
+                $order = "DESC";
+            } else {
+                $order = "ASC";
+            }
+            if ($method == "get_listings") {
+                if (empty($parameters['query'][0]['order'])) {
+                    $parameters['query'][0]['order'][] = array(
+                        'field' => 'price',
+                        'order' => $order
+                    );
+                }
+            }
+        }
         $request = array(
             'api-key' => $this->api_key,
             'request' => json_encode(array("method" => $method, "parameters" => $parameters))

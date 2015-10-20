@@ -32,7 +32,7 @@ class SEO_Rets_Search_Widget extends WP_Widget {
 				seorets.startForm(jQuery(m).nextUntil('.sr-formsection + *','.sr-formsection'));
 			});
 		})();</script>
-		<div class="sr-formsection" sroperator="AND" srtype="<?php echo $instance['type']?>">
+		<div class="sr-formsection sr-content" sroperator="AND" srtype="<?php echo $instance['type']?>">
 		<div class="row margin-top-10">
 		<div class="col-md-4 col-sm-4">
 		<label for="">City:</label>

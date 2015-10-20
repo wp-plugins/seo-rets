@@ -6,7 +6,7 @@ if (count($listings) == 0 && !$silent) {
 
 ?>
 
-<div class="sr-listings">
+<div class="sr-listings sr-content">
     <?php
     $templates = get_option('sr_templates');
     $server_name = $this->feed->server_name;

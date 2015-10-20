@@ -180,6 +180,10 @@
                     "c": conditions
                 },
                 "t": "<?php echo $type?>",
+                "o": [{
+                    "f": jQuery('select#sr-price-sort option:selected').attr('srfield'),
+                    "o": jQuery('select#sr-price-sort option:selected').attr('srdirection')
+                }],
                 "p": 10,
                 "g": 1
             };
@@ -198,7 +202,7 @@
         </div>
     </div>
     <div class="row margin-top-10">
-        <div class="col-md-6 col-sm-6">
+        <div class="col-md-4 col-sm-4">
             <div class="row">
                 <div class="col-md-6 col-sm-6">
                     <label for="bedrooms">Bedrooms:</label>
@@ -216,7 +220,7 @@
                 </div>
                 <div class="col-md-6 col-sm-6">
                     <label for="">Baths:</label>
-                    <select class="form-control" id="bedrooms">
+                    <select class="form-control" id="baths">
                         <option value="">Any</option>
                         <option value="1">1+</option>
                         <option value="2">2+</option>
@@ -230,17 +234,31 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-sm-6">
+        <div class="col-md-4 col-sm-4">
             <div class="row">
-                <div class="col-md-4 col-sm-4">
+                <div class="col-md-6 col-sm-6">
                     <label for="">Price:</label>
                     <input class="form-control" type="text" size="9" placeholder="Min" id="price-low">
                 </div>
-                <div class="col-md-4 col-sm-4">
+                <div class="col-md-6 col-sm-6">
                     <label for="">&nbsp;</label>
                     <input class="form-control" type="text" size="9" placeholder="Max" id="price-high">
                 </div>
-                <div class="col-md-4 col-sm-4">
+
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-4">
+            <div class="row">
+                <div class="col-md-6 col-sm-6">
+
+                    <label for="sr-price-sort">Price sort:</label>
+
+                    <select id="sr-price-sort" class="sr-order form-control">
+                        <option srfield="price" srdirection="0"  value="price:DESC">High to Low</option>
+                        <option srfield="price" srdirection="1" value="price:ASC">Low to High</option>
+                    </select>
+                </div>
+                <div class="col-md-6 col-sm-6">
                     <label for="">&nbsp;</label>
                     <input type="submit" class="form-control" id="sr-refinebtn" value="Refine">
                 </div>

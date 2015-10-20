@@ -5,6 +5,11 @@
         }
     </style>
     <?php
+    $fields = isset($params['fields']) ? explode(";", $params['fields']) : NULL;
+    foreach ($fields as $field) {
+        $f = explode(":", $field);
+        $field_A[$f[0]] = explode(",", $f[1]);
+    }
     wp_enqueue_script('sr_method_google-map', $this->js_resources_dir . 'google-map.js', array('jquery'));
     wp_print_scripts(array('sr_method_google-map'));
 
@@ -682,7 +687,23 @@
     ?>
     <div id="search-area" class="table-responsive respstyle">
         <div id="search-form">
-
+            <?php
+            if($fields != NULL){
+                foreach($field_A as $key => $values){
+                    ?>
+                    <select style="display: none" class="sr-formelement" name="<?= $key; ?>" id="" >
+                        <?php
+                        foreach($values as $sval){
+                            ?>
+                            <option selected value="<?= $sval; ?>"><?= $sval?></option>
+                            <?
+                        }
+                        ?>
+                    </select>
+                    <?
+                }
+            }
+            ?>
             <div class="row">
                 <div class="col-md-4 col-sm-4 ">
                     <label for="property-type">Type:</label>
@@ -948,13 +969,13 @@
                         src="<?php echo $this->plugin_dir ?>resources/images/ajax.gif"/></div>
             </div>
         </div>
-        <? if($_SERVER['REQUEST_URI'] == '/sr-mapsearch/'){ ?>
-        <div id="listings-container" class="col-md-12">
-            <div id="listings"></div>
-            <img id="ajax-loader2" src="
+        <? if ($_SERVER['REQUEST_URI'] == '/sr-mapsearch/') { ?>
+            <div id="listings-container" class="col-md-12">
+                <div id="listings"></div>
+                <img id="ajax-loader2" src="
         <?php echo $this->plugin_dir ?>resources/images/ajax2.gif"
-                 style="display:none;"/>
-        </div>
+                     style="display:none;"/>
+            </div>
         <? } ?>
         <div style="clear:both;"></div>
         <!--        <p>Powered By <a href="http://seorets.com/" target="_blank">SEO RETS</a></p>-->

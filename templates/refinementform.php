@@ -1,5 +1,8 @@
-[sr-search type="script"]
-
+<?
+wp_enqueue_script('sr_seorets-min');
+wp_print_scripts(array('sr_seorets-min'));
+?>
+<div></div>
 <script type="text/javascript">
     jQuery(function () {
         var form = jQuery("#refinesearch");
@@ -8,11 +11,20 @@
         var bathsfield = jQuery("#sr-bathsfield");
         var pricefieldl = jQuery("#sr-pricefieldl");
         var pricefieldh = jQuery("#sr-pricefieldh");
+        var priceSort = jQuery("#sr-price-sort");
 
         var request = <?php echo json_encode($query)?>;
         var query = request.q;
         form.attr("srtype", request.t);
-
+        if (request.o) {
+            if (request.o[0]['f'] == 'price') {
+                if (request.o[0]['o'] == 0) {
+                    priceSort.val('price:DESC');
+                } else {
+                    priceSort.val('price:ASC');
+                }
+            }
+        }
         if (query.b !== 1) {
             query = {b: 1, c: [query]};
         }
@@ -54,7 +66,8 @@
                 } else if (condition.o == "<" || condition.o == "<=") {
                     pricefieldh.val("$" + format_money(condition.v, 0));
                 }
-            } else {
+            }
+            else {
                 return false;
             }
             return true;
@@ -64,6 +77,7 @@
         refinebtn.click(function () {
             var newrequest = seorets.getFormRequest(form);
             request.q = newrequest.q;
+            request.o = [newrequest.o[0]];
             request.q.c = request.q.c.concat(query.c);
             request.g = 1;
             window.location = "?" + encodeURIComponent(Base64.encode(JSON.stringify(request)));
@@ -72,12 +86,12 @@
 </script>
 <div class="sr-content" id="refinesearch">
     <div class="row">
-        <div class="col-md-12 col-sm-12">
+        <div class="col-md-6 col-sm-6">
             <span>Refine Your Search</span>
         </div>
     </div>
     <div class="row margin-top-10">
-        <div class="col-md-6 col-sm-6">
+        <div class="col-md-4 col-sm-4">
             <div class="row">
                 <div class="col-md-6 col-sm-6">
                     <label for="sr-bedsfield">Bedrooms:</label>
@@ -111,19 +125,34 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-sm-6">
+        <div class="col-md-4 col-sm-4">
             <div class="row">
-                <div class="col-md-4 col-sm-4">
+                <div class="col-md-6 col-sm-6">
                     <label for="sr-pricefieldl">Price:</label>
-                    <input type="text" id="sr-pricefieldl" name="sd94j" placeholder="Min" class="sr-formelement form-control"
+                    <input type="text" id="sr-pricefieldl" name="sd94j" placeholder="Min"
+                           class="sr-formelement form-control"
                            srfield="price" srtype="numeric" sroperator=">=" size="9"/>
                 </div>
-                <div class="col-md-4 col-sm-4">
+                <div class="col-md-6 col-sm-6">
                     <label for="">&nbsp;</label>
-                    <input type="text" id="sr-pricefieldh" name="mkx73" placeholder="Max" class="sr-formelement form-control"
+                    <input type="text" id="sr-pricefieldh" name="mkx73" placeholder="Max"
+                           class="sr-formelement form-control"
                            srfield="price" srtype="numeric" sroperator="<=" size="9"/>
                 </div>
-                <div class="col-md-4 col-sm-4">
+
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-4">
+            <div class="row">
+                <div class="col-md-6 col-sm-6">
+                    <label for="sr-price-sort">Price sort:</label>
+
+                    <select id="sr-price-sort" class="sr-order form-control">
+                        <option srfield="price" srdirection="DESC" value="price:DESC">High to Low</option>
+                        <option srfield="price" srdirection="ASC" value="price:ASC">Low to High</option>
+                    </select>
+                </div>
+                <div class="col-md-6 col-sm-6">
                     <label for="">&nbsp;</label>
                     <input type="submit" class="form-control" id="sr-refinebtn" value="Refine"/>
                 </div>

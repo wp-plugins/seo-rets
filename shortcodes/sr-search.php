@@ -6,7 +6,11 @@ if (!$sr->api_key) return '<p class="sr-error">You must activate the SEO RETS pl
 $type = isset($params['type']) ? $params['type'] : "simple";
 $collection = isset($params['coll']) ? $params['coll'] : "";
 $order = isset($params['order']) ? explode(":", $params['order']) : NULL;
-
+$fields = isset($params['fields']) ? explode(";", $params['fields']) : NULL;
+foreach ($fields as $field) {
+    $f = explode(":", $field);
+    $field_A[$f[0]] = explode(",", $f[1]);
+}
 if ($type == "simple"):?>
     <form action="<?php echo get_bloginfo('url') ?>/sr-search" method="get">
         <input type="hidden" name="perpage" value="10">
@@ -89,13 +93,8 @@ if ($type == "simple"):?>
     echo iconv("UTF-8", "ISO-8859-1//TRANSLIT", str_replace($search, $replace, html_entity_decode($content, ENT_COMPAT, 'UTF-8')));
 elseif ($type == "customform"):
     echo do_shortcode(get_option("sr_customform"));
-elseif ($type == "script"):
-    wp_enqueue_script('sr_seorets-min');
-    wp_print_scripts(array('sr_seorets-min'));
-    ?>
-    <script type="text/javascript">seorets.options = {blogurl: "<?php echo get_bloginfo('url')?>"};</script>
-    <div></div>
-<?php elseif ($type == "basicstyle"):
+
+elseif ($type == "basicstyle"):
     wp_enqueue_script('sr_seorets-min');
     wp_print_scripts(array('sr_seorets-min'));
     ?>
@@ -158,6 +157,24 @@ elseif ($type == "script"):
             });
         })();</script>
     <div class="sr-formsection" sroperator="AND" srtype="res">
+        <?php
+        if ($fields != NULL) {
+            foreach ($field_A as $key => $values) {
+                ?>
+                <select style="display: none" class="sr-formelement" srfield="<?= $key; ?>" sroperator="LIKE"
+                        multiple="" name="" id="">
+                    <?php
+                    foreach ($values as $sval) {
+                        ?>
+                        <option selected value="<?= $sval; ?>"><?= $sval ?></option>
+                        <?
+                    }
+                    ?>
+                </select>
+                <?
+            }
+        }
+        ?>
         <select class="sr-class" srtype="res">
             <?php
             $n = 0;
@@ -385,7 +402,25 @@ elseif ($type == "script"):
             display: none;
         }
     </style>
-    <div class="sr-formsection" srtype="res" sroperator="AND">
+    <div class="sr-formsection sr-content" srtype="res" sroperator="AND">
+        <?php
+        if ($fields != NULL) {
+            foreach ($field_A as $key => $values) {
+                ?>
+                <select style="display: none" class="sr-formelement" srfield="<?= $key; ?>" sroperator="LIKE"
+                        multiple="" name="" id="">
+                    <?php
+                    foreach ($values as $sval) {
+                        ?>
+                        <option selected value="<?= $sval; ?>"><?= $sval ?></option>
+                        <?
+                    }
+                    ?>
+                </select>
+                <?
+            }
+        }
+        ?>
         <div class="row">
             <div class="col-md-3 col-sm-3">
                 <label for="">
@@ -633,222 +668,238 @@ elseif ($type == "script"):
                         </select>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row margin-top-40">
-            <div class="col-md-3 col-sm-3">
-                <label for="">Features</label>
-            </div>
-            <div class="col-md-9 col-sm-9 left-border-line">
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        <div class="row">
-                            <div class="col-md-4 col-sm-4">
-                                <label for="">
-                                    Community:
-                                </label>
-                            </div>
-                            <div class="col-md-8 col-sm-8">
-                                <ul class="ul__features">
-                                    <li>
-                                        <input id="sr_features-Pool" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Pool">
-                                        <label for="sr_features-Pool">Pool</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Golf" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Golf">
-                                        <label for="sr_features-Golf">Golf</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Tennis" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Tennis">
-                                        <label for="sr_features-Tennis">Tennis</label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                <div class="row margin-top-15">
+                    <div class="col-md-4 col-sm-4">
+                        <label for="sr-price-sort">Price sort:</label>
                     </div>
-                    <div class="col-md-6 col-sm-6">
-                        <div class="row">
-                            <div class="col-md-4 col-sm-4">
-                                <label for="">
-                                    Parking:
-                                </label>
-                            </div>
-                            <div class="col-md-8 col-sm-8">
-                                <ul class="ul__features">
-                                    <li>
-                                        <input id="sr_features-Garage" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Garage">
-                                        <label for="sr_features-Garage">Garage</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Boat" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Boat">
-                                        <label for="sr_features-Boat">Boat</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Carport" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Carport">
-                                        <label for="sr_features-Carport">Carport</label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        <div class="row">
-                            <div class="col-md-4 col-sm-4">
-                                <label for="">
-                                    Outdoor Living:
-                                </label>
-                            </div>
-                            <div class="col-md-8 col-sm-8">
-                                <ul class="ul__features">
-                                    <li>
-                                        <input id="sr_features-Deck" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Deck">
-                                        <label for="sr_features-Deck">Deck</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Patio" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Patio">
-                                        <label for="sr_features-Patio">Patio</label>
-                                    </li>
-
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6">
-                        <div class="row">
-                            <div class="col-md-4 col-sm-4">
-                                <label for="">
-                                    Out Buildings:
-                                </label>
-                            </div>
-                            <div class="col-md-8 col-sm-8">
-                                <ul class="ul__features">
-                                    <li>
-                                        <input id="sr_features-Fenced" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Fenced">
-                                        <label for="sr_features-Fenced">Fenced</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Sprinkler" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Sprinkler">
-                                        <label for="sr_features-Sprinkler">Sprinkler System</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Barn" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Barn">
-                                        <label for="sr_features-Barn">Barn</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Greenhouse" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Greenhouse">
-                                        <label for="sr_features-Greenhouse">Greenhouse</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Workshop" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Workshop">
-                                        <label for="sr_features-Workshop">Workshop</label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        <div class="row">
-                            <div class="col-md-4 col-sm-4">
-                                <label for="">
-                                    Flooring:
-                                </label>
-                            </div>
-                            <div class="col-md-8 col-sm-8">
-                                <ul class="ul__features">
-                                    <li>
-                                        <input id="sr_features-Wood" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Wood">
-                                        <label for="sr_features-Wood">Wood</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Marble" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Marble">
-                                        <label for="sr_features-Marble">Marble</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Carpet" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Carpet">
-                                        <label for="sr_features-Carpet">Carpet</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Laminate" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Laminate">
-                                        <label for="sr_features-Laminate">Laminate</label>
-                                    </li>
-
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6">
-                        <div class="row">
-                            <div class="col-md-4 col-sm-4">
-                                <label for="">
-                                    Interior:
-                                </label>
-                            </div>
-                            <div class="col-md-8 col-sm-8">
-                                <ul class="ul__features">
-                                    <li>
-                                        <input id="sr_features-Fireplace" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Fireplace">
-                                        <label for="sr_features-Fireplace">Fireplace</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Furnished" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Furnished">
-                                        <label for="sr_features-Furnished">Furnished</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Elevator" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Elevator">
-                                        <label for="sr_features-Elevator">Elevator</label>
-                                    </li>
-
-                                </ul>
-                            </div>
-                        </div>
+                    <div class="col-md-8 col-sm-8">
+                        <select id="sr-price-sort" class="sr-order form-control">
+                            <option srfield="price" srdirection="DESC" selected value="price:DESC">High to Low</option>
+                            <option srfield="price" srdirection="ASC" value="price:ASC">Low to High</option>
+                        </select>
                     </div>
                 </div>
             </div>
         </div>
+        <?php
+        if ($this->show_features == "true") {
+
+            ?>
+            <div class="row margin-top-40">
+                <div class="col-md-3 col-sm-3">
+                    <label for="">Features</label>
+                </div>
+                <div class="col-md-9 col-sm-9 left-border-line">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <label for="">
+                                        Community:
+                                    </label>
+                                </div>
+                                <div class="col-md-8 col-sm-8">
+                                    <ul class="ul__features">
+                                        <li>
+                                            <input id="sr_features-Pool" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Pool">
+                                            <label for="sr_features-Pool">Pool</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Golf" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Golf">
+                                            <label for="sr_features-Golf">Golf</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Tennis" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Tennis">
+                                            <label for="sr_features-Tennis">Tennis</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <label for="">
+                                        Parking:
+                                    </label>
+                                </div>
+                                <div class="col-md-8 col-sm-8">
+                                    <ul class="ul__features">
+                                        <li>
+                                            <input id="sr_features-Garage" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Garage">
+                                            <label for="sr_features-Garage">Garage</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Boat" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Boat">
+                                            <label for="sr_features-Boat">Boat</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Carport" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Carport">
+                                            <label for="sr_features-Carport">Carport</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <label for="">
+                                        Outdoor Living:
+                                    </label>
+                                </div>
+                                <div class="col-md-8 col-sm-8">
+                                    <ul class="ul__features">
+                                        <li>
+                                            <input id="sr_features-Deck" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Deck">
+                                            <label for="sr_features-Deck">Deck</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Patio" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Patio">
+                                            <label for="sr_features-Patio">Patio</label>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <label for="">
+                                        Out Buildings:
+                                    </label>
+                                </div>
+                                <div class="col-md-8 col-sm-8">
+                                    <ul class="ul__features">
+                                        <li>
+                                            <input id="sr_features-Fenced" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Fenced">
+                                            <label for="sr_features-Fenced">Fenced</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Sprinkler" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Sprinkler">
+                                            <label for="sr_features-Sprinkler">Sprinkler System</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Barn" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Barn">
+                                            <label for="sr_features-Barn">Barn</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Greenhouse" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Greenhouse">
+                                            <label for="sr_features-Greenhouse">Greenhouse</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Workshop" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Workshop">
+                                            <label for="sr_features-Workshop">Workshop</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <label for="">
+                                        Flooring:
+                                    </label>
+                                </div>
+                                <div class="col-md-8 col-sm-8">
+                                    <ul class="ul__features">
+                                        <li>
+                                            <input id="sr_features-Wood" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Wood">
+                                            <label for="sr_features-Wood">Wood</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Marble" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Marble">
+                                            <label for="sr_features-Marble">Marble</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Carpet" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Carpet">
+                                            <label for="sr_features-Carpet">Carpet</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Laminate" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Laminate">
+                                            <label for="sr_features-Laminate">Laminate</label>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <label for="">
+                                        Interior:
+                                    </label>
+                                </div>
+                                <div class="col-md-8 col-sm-8">
+                                    <ul class="ul__features">
+                                        <li>
+                                            <input id="sr_features-Fireplace" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Fireplace">
+                                            <label for="sr_features-Fireplace">Fireplace</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Furnished" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Furnished">
+                                            <label for="sr_features-Furnished">Furnished</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Elevator" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Elevator">
+                                            <label for="sr_features-Elevator">Elevator</label>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
         <?php if (isset($order[0]) && isset($order[1])): ?>
             <input type="hidden" class="sr-order" srfield="<?php echo $order[0] ?>"
                    srdirection="<?php echo $order[1] ?>"/>
@@ -979,7 +1030,25 @@ elseif ($type == "script"):
             display: none;
         }
     </style>
-    <div class="sr-formsection" srtype="res" sroperator="AND">
+    <div class="sr-formsection sr-content" srtype="res" sroperator="AND">
+        <?php
+        if ($fields != NULL) {
+            foreach ($field_A as $key => $values) {
+                ?>
+                <select style="display: none" class="sr-formelement" srfield="<?= $key; ?>" sroperator="LIKE"
+                        multiple="" name="" id="">
+                    <?php
+                    foreach ($values as $sval) {
+                        ?>
+                        <option selected value="<?= $sval; ?>"><?= $sval ?></option>
+                        <?
+                    }
+                    ?>
+                </select>
+                <?
+            }
+        }
+        ?>
         <div class="row">
             <div class="col-md-3 col-sm-3">
                 <label for="">
@@ -1011,7 +1080,7 @@ elseif ($type == "script"):
                     </div>
                 </div>
 
-                <div class="row margin-top-15">
+                <div id="sb_type" class="row disp-none margin-top-15">
                     <div class="col-md-4 col-sm-4">
                         <label for="">Sub Type:</label>
                     </div>
@@ -1230,222 +1299,237 @@ elseif ($type == "script"):
                         </select>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row margin-top-40">
-            <div class="col-md-3 col-sm-3">
-                <label for="">Features</label>
-            </div>
-            <div class="col-md-9 col-sm-9 left-border-line">
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        <div class="row">
-                            <div class="col-md-4 col-sm-4">
-                                <label for="">
-                                    Community:
-                                </label>
-                            </div>
-                            <div class="col-md-8 col-sm-8">
-                                <ul class="ul__features">
-                                    <li>
-                                        <input id="sr_features-Pool" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Pool">
-                                        <label for="sr_features-Pool">Pool</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Golf" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Golf">
-                                        <label for="sr_features-Golf">Golf</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Tennis" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Tennis">
-                                        <label for="sr_features-Tennis">Tennis</label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                <div class="row margin-top-15">
+                    <div class="col-md-4 col-sm-4">
+                        <label for="sr-price-sort">Price sort:</label>
                     </div>
-                    <div class="col-md-6 col-sm-6">
-                        <div class="row">
-                            <div class="col-md-4 col-sm-4">
-                                <label for="">
-                                    Parking:
-                                </label>
-                            </div>
-                            <div class="col-md-8 col-sm-8">
-                                <ul class="ul__features">
-                                    <li>
-                                        <input id="sr_features-Garage" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Garage">
-                                        <label for="sr_features-Garage">Garage</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Boat" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Boat">
-                                        <label for="sr_features-Boat">Boat</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Carport" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Carport">
-                                        <label for="sr_features-Carport">Carport</label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        <div class="row">
-                            <div class="col-md-4 col-sm-4">
-                                <label for="">
-                                    Outdoor Living:
-                                </label>
-                            </div>
-                            <div class="col-md-8 col-sm-8">
-                                <ul class="ul__features">
-                                    <li>
-                                        <input id="sr_features-Deck" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Deck">
-                                        <label for="sr_features-Deck">Deck</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Patio" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Patio">
-                                        <label for="sr_features-Patio">Patio</label>
-                                    </li>
-
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6">
-                        <div class="row">
-                            <div class="col-md-4 col-sm-4">
-                                <label for="">
-                                    Out Buildings:
-                                </label>
-                            </div>
-                            <div class="col-md-8 col-sm-8">
-                                <ul class="ul__features">
-                                    <li>
-                                        <input id="sr_features-Fenced" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Fenced">
-                                        <label for="sr_features-Fenced">Fenced</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Sprinkler" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Sprinkler">
-                                        <label for="sr_features-Sprinkler">Sprinkler System</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Barn" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Barn">
-                                        <label for="sr_features-Barn">Barn</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Greenhouse" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Greenhouse">
-                                        <label for="sr_features-Greenhouse">Greenhouse</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Workshop" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Workshop">
-                                        <label for="sr_features-Workshop">Workshop</label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        <div class="row">
-                            <div class="col-md-4 col-sm-4">
-                                <label for="">
-                                    Flooring:
-                                </label>
-                            </div>
-                            <div class="col-md-8 col-sm-8">
-                                <ul class="ul__features">
-                                    <li>
-                                        <input id="sr_features-Wood" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Wood">
-                                        <label for="sr_features-Wood">Wood</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Marble" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Marble">
-                                        <label for="sr_features-Marble">Marble</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Carpet" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Carpet">
-                                        <label for="sr_features-Carpet">Carpet</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Laminate" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Laminate">
-                                        <label for="sr_features-Laminate">Laminate</label>
-                                    </li>
-
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6">
-                        <div class="row">
-                            <div class="col-md-4 col-sm-4">
-                                <label for="">
-                                    Interior:
-                                </label>
-                            </div>
-                            <div class="col-md-8 col-sm-8">
-                                <ul class="ul__features">
-                                    <li>
-                                        <input id="sr_features-Fireplace" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Fireplace">
-                                        <label for="sr_features-Fireplace">Fireplace</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Furnished" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Furnished">
-                                        <label for="sr_features-Furnished">Furnished</label>
-                                    </li>
-                                    <li>
-                                        <input id="sr_features-Elevator" type="checkbox" class="sr-formelement"
-                                               srfield="features"
-                                               sroperator="LIKE" value="Elevator">
-                                        <label for="sr_features-Elevator">Elevator</label>
-                                    </li>
-
-                                </ul>
-                            </div>
-                        </div>
+                    <div class="col-md-8 col-sm-8">
+                        <select id="sr-price-sort" class="sr-order form-control">
+                            <option srfield="price" srdirection="DESC" selected value="price:DESC">High to Low</option>
+                            <option srfield="price" srdirection="ASC" value="price:ASC">Low to High</option>
+                        </select>
                     </div>
                 </div>
             </div>
         </div>
+        <?php
+        if ($this->show_features == "true") {
+            ?>
+            <div class="row margin-top-40">
+                <div class="col-md-3 col-sm-3">
+                    <label for="">Features</label>
+                </div>
+                <div class="col-md-9 col-sm-9 left-border-line">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <label for="">
+                                        Community:
+                                    </label>
+                                </div>
+                                <div class="col-md-8 col-sm-8">
+                                    <ul class="ul__features">
+                                        <li>
+                                            <input id="sr_features-Pool" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Pool">
+                                            <label for="sr_features-Pool">Pool</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Golf" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Golf">
+                                            <label for="sr_features-Golf">Golf</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Tennis" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Tennis">
+                                            <label for="sr_features-Tennis">Tennis</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <label for="">
+                                        Parking:
+                                    </label>
+                                </div>
+                                <div class="col-md-8 col-sm-8">
+                                    <ul class="ul__features">
+                                        <li>
+                                            <input id="sr_features-Garage" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Garage">
+                                            <label for="sr_features-Garage">Garage</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Boat" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Boat">
+                                            <label for="sr_features-Boat">Boat</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Carport" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Carport">
+                                            <label for="sr_features-Carport">Carport</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <label for="">
+                                        Outdoor Living:
+                                    </label>
+                                </div>
+                                <div class="col-md-8 col-sm-8">
+                                    <ul class="ul__features">
+                                        <li>
+                                            <input id="sr_features-Deck" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Deck">
+                                            <label for="sr_features-Deck">Deck</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Patio" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Patio">
+                                            <label for="sr_features-Patio">Patio</label>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <label for="">
+                                        Out Buildings:
+                                    </label>
+                                </div>
+                                <div class="col-md-8 col-sm-8">
+                                    <ul class="ul__features">
+                                        <li>
+                                            <input id="sr_features-Fenced" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Fenced">
+                                            <label for="sr_features-Fenced">Fenced</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Sprinkler" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Sprinkler">
+                                            <label for="sr_features-Sprinkler">Sprinkler System</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Barn" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Barn">
+                                            <label for="sr_features-Barn">Barn</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Greenhouse" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Greenhouse">
+                                            <label for="sr_features-Greenhouse">Greenhouse</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Workshop" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Workshop">
+                                            <label for="sr_features-Workshop">Workshop</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <label for="">
+                                        Flooring:
+                                    </label>
+                                </div>
+                                <div class="col-md-8 col-sm-8">
+                                    <ul class="ul__features">
+                                        <li>
+                                            <input id="sr_features-Wood" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Wood">
+                                            <label for="sr_features-Wood">Wood</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Marble" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Marble">
+                                            <label for="sr_features-Marble">Marble</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Carpet" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Carpet">
+                                            <label for="sr_features-Carpet">Carpet</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Laminate" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Laminate">
+                                            <label for="sr_features-Laminate">Laminate</label>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <label for="">
+                                        Interior:
+                                    </label>
+                                </div>
+                                <div class="col-md-8 col-sm-8">
+                                    <ul class="ul__features">
+                                        <li>
+                                            <input id="sr_features-Fireplace" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Fireplace">
+                                            <label for="sr_features-Fireplace">Fireplace</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Furnished" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Furnished">
+                                            <label for="sr_features-Furnished">Furnished</label>
+                                        </li>
+                                        <li>
+                                            <input id="sr_features-Elevator" type="checkbox" class="sr-formelement"
+                                                   srfield="features"
+                                                   sroperator="LIKE" value="Elevator">
+                                            <label for="sr_features-Elevator">Elevator</label>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
         <?php if (isset($order[0]) && isset($order[1])): ?>
             <input type="hidden" class="sr-order" srfield="<?php echo $order[0] ?>"
                    srdirection="<?php echo $order[1] ?>"/>

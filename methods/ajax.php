@@ -23,6 +23,18 @@ $response = array(
     'mes' => 'Action not found.'
 );
 switch ($_GET['action']) {
+    case "order-save":
+        require_auth();
+        if (isset($_POST['order'])) {
+            update_option("sr_listingsOrder", $_POST['order']);
+        } else {
+            update_option("sr_listingsOrder", 'none');
+        }
+        $response = array(
+            'error' => 0,
+            'mes' => 'Sort option updated.'
+        );
+        break;
     case "deleteShortcode":
         $shortcode = get_option('sr-shortcode');
         if (isset($_POST['shortcode'])) {
@@ -1120,6 +1132,18 @@ switch ($_GET['action']) {
         $response = array(
             'error' => 0,
             'mes' => 'Bootstrap option updated.'
+        );
+        break;
+    case "show_features-save":
+        require_auth();
+        if (isset($_POST['check'])) {
+            update_option("sr_show_features", $_POST['check']);
+        } else {
+            update_option("sr_show_features", false);
+        }
+        $response = array(
+            'error' => 0,
+            'mes' => 'Search option updated.'
         );
         break;
     case "using_ace-save":

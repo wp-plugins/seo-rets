@@ -4,7 +4,7 @@ Donate link:
 Tags: RETS, IDX, SEORETS, Real estate, SEO
 Requires at least: 3.0.1
 Tested up to: 4.3
-Stable tag: 3.3.48
+Stable tag: 3.3.51
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,6 +46,21 @@ You can create page with market statistics with help of [sr-market] shortcode.
 3. Feed Information
 
 == Changelog ==
+= 3.3.51 =
+* Fix search bug.
+* Features switch on/off.
+
+= 3.3.50 =
+* New parameter in advanced search. Now you can add default parameter to search. [sr-search type="advanced" coll="Your collection name" fields="One-field:One-value,two-value,three-value;Second-field:One-value,two-value,three-value"]
+* New parameter in map search. Now you can add default parameter to map search. For example you can select what city will shows by default [sr-mapsearch fields="city:Your city name"] or [sr-splitsearch fields="city:Your city name"]
+* Fix makeup style.
+
+= 3.3.49 =
+* New parameter in advanced search.
+* New parameter in refine search function. Now users can sort by price.
+* New settings (Seo-rets->Developer Tools->Advanced Settings) "Default sort option". Now You can select in what order by default show listings.
+* Fix makeup style.
+
 = 3.3.48 =
 * Fix bug in lead popup form.
 * Fix makeup style.

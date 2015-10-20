@@ -11,6 +11,7 @@ $blogUrl = get_bloginfo('url');
         $("#tabgroup").tabs();
         var sitemap_message = $("#sitemap-message");
         var boot_mess = $("#boot_mess");
+        var order_mess = $("#order_mess");
         var css_message = $("#css-message");
         var css_box = $("#edit-css");
         var seo_message = $("#seo-message");
@@ -24,6 +25,7 @@ $blogUrl = get_bloginfo('url');
         var customform_message = $("#customform-message");
         var unfoundpage_message = $("#unfoundpage-message");
         var plugintext_message = $("#plugintext-message");
+        var features_message = $("#features-message");
 
         jQuery('#template-related-properties').change(function () {
             jQuery('.extraRP').toggle();
@@ -547,6 +549,59 @@ $blogUrl = get_bloginfo('url');
                 }
             });
         });
+        $("#show_features-save").click(function () {
+            var check = true;
+            if ($('#show_features').is(":checked")) {
+                check = true;
+            } else {
+                check = false;
+            }
+            $.ajax({
+                url: '<?php echo get_bloginfo('url')?>/sr-ajax?action=show_features-save',
+                type: "POST",
+                data: {
+                    check: check
+                },
+                success: function (response) {
+                    if (response.error == 0) {
+                        features_message.addClass('sr-success');
+                        <?php //FIXME need to remove sr-fail class ?>
+                    } else {
+                        features_message.addClass('sr-fail');
+                    }
+                    features_message.show();
+                    features_message.text(response.mes);
+                    features_message.delay(1500).fadeOut("slow");
+                }
+            });
+        });
+        $("#order-save").click(function () {
+            var sort = "none";
+            if ($('#highorlow').is(":checked")) {
+                sort = $('#price-order option:selected').val();
+            } else if ($('#none-order').is(":checked")) {
+                sort = "none";
+            }
+            $.ajax({
+                url: '<?php echo get_bloginfo('url')?>/sr-ajax?action=order-save',
+                type: "POST",
+                data: {
+                    order: sort
+                },
+                success: function (response) {
+                    if (response.error == 0) {
+                        order_mess.addClass('sr-success');
+                        <?php //FIXME need to remove sr-fail class ?>
+                    } else {
+                        order_mess.addClass('sr-fail');
+                    }
+                    order_mess.show();
+                    order_mess.text(response.mes);
+                    order_mess.delay(1500).fadeOut("slow");
+                }
+            });
+        });
+
         $("#emailmethod-save").click(function () {
             console.log($("input[name='email-option']:checked").val());
             $.ajax({
@@ -1420,6 +1475,32 @@ $blogUrl = get_bloginfo('url');
                 </div>
             <?php endif; ?>
             <div id="advanced">
+                <h3>Default sort option</h3>
+
+                <p>Select in what order thi listings will be show</p>
+                <label for="none-order"><input type="radio" <? if (get_option('sr_listingsOrder') == "none") {
+                        echo "checked='checked'";
+                    } ?> id="none-order" name="order">With out order</label><br/>
+                <label for="highorlow"><input type="radio" <? if (get_option('sr_listingsOrder') != "none") {
+                        echo "checked='checked'";
+                    } ?> id="highorlow" name="order">Use price sort
+                    <select name="price-order" id="price-order">
+                        <option <? if (get_option('sr_listingsOrder') == "heightolow") {
+                            echo "selected";
+                        } ?> value="heightolow">Height to low
+                        </option>
+                        <option <? if (get_option('sr_listingsOrder') == "lowtoheigh") {
+                            echo "selected";
+                        } ?> value="lowtoheigh">Low to height
+                        </option>
+                    </select>
+                </label><br/>
+                <input type="submit" id="order-save" class="button-primary" value="Save"/>
+                <span id="order_mess"></span>
+                <br/>
+                <br/>
+
+                <div style="height:1px;background-color:#CCC;"></div>
 
                 <h3>Plugin Using Bootstrap</h3>
 
@@ -1434,6 +1515,23 @@ $blogUrl = get_bloginfo('url');
 
                 <input type="submit" id="using_boot-save" class="button-primary" value="Save"/>
                 <span id="boot_mess"></span>
+                <br/>
+                <br/>
+                <div style="height:1px;background-color:#CCC;"></div>
+
+                <h3>Show Features</h3>
+
+                <p>Show Features on advanced search page.</p>
+                <label for="show_features"><input type="checkbox"
+                                                  id="show_features" <? if (get_option('sr_show_features') == 'true') {
+                        echo "checked='checked'";
+                    } ?> name="show_features">
+                    Show Features</label>
+                <br/>
+                <br/>
+
+                <input type="submit" id="show_features-save" class="button-primary" value="Save"/>
+                <span id="features-message"></span>
                 <br/>
                 <br/>
 

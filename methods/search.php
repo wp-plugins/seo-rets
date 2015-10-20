@@ -26,55 +26,10 @@ if ( !$sr->api_key ) {
 			$get_vars->p = isset($get_vars->p) ? intval($get_vars->p) : 10; // Default to 10 per page if request doesn't specify
 			$get_vars->g = isset($get_vars->g) ? intval($get_vars->g) : 1;
 			
-			// Start recursive function to build a request to be sent to the api for search
 			$conditions = $this->convert_to_api_conditions($get_vars->q);
 			
 			$prioritization = get_option('sr_prioritization');
 			$prioritization = ($prioritization === false) ? array() : $prioritization;
-		
-
-			/*if ( is_array($get_vars->t) ) {
-
-				$listings = array();
-
-				foreach ( $get_vars->t as $type_element ) {
-
-					$query = array(
-						"type" => $type_element,
-						"query" => $conditions,
-					);
-					
-					if (isset($get_vars->o) && is_array($get_vars->o)) {
-						$query["order"] = array();
-						
-						foreach ($get_vars->o as $order) {
-							$query["order"][] = array(
-								"field" => $order->f,
-								"order" => $order->o==0?"DESC":"ASC"
-							);
-						}
-					}
-					
-					$newquery = $this->prioritize($query, $prioritization);
-
-					
-					$response = $this->api_request("get_listings", array(
-						'query' => $newquery,
-						'limit' => array(
-							'range' => $get_vars->p,
-							'offset' => ($get_vars->g - 1) * $get_vars->p
-						)
-					));
-
-					foreach ( $response->result as $index => $listing ) {
-						$response->result[$index]->system_type = $type_element;
-					}
-
-					$listings = array_merge($response->result, $listings);
-
-				} 
-
-			} else {*/
 				$query = array(
 					"type" => $get_vars->t,
 					"query" => $conditions,
@@ -102,11 +57,6 @@ if ( !$sr->api_key ) {
 				));
 
 				$listings = $response->result;
-			//}
-
-			
-			
-			
 			$type = $get_vars->t;
 			$listing_html = $this->include_return('templates/results.php', get_defined_vars());
 			$pagination_html = $this->pagination_html($get_vars, $get_vars->g, ceil($response->count / $get_vars->p), $response->count);

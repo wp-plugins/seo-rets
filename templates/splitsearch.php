@@ -5,6 +5,11 @@
         }
     </style>
     <?php
+    $fields = isset($params['fields']) ? explode(";", $params['fields']) : NULL;
+    foreach ($fields as $field) {
+        $f = explode(":", $field);
+        $field_A[$f[0]] = explode(",", $f[1]);
+    }
     wp_enqueue_script('sr_method_google-map', $this->js_resources_dir . 'google-map.js', array('jquery'));
     wp_print_scripts(array('sr_method_google-map'));
 
@@ -24,8 +29,6 @@
             }
             return x1 + x2;
         }
-
-
         var zoom_to;
         var rightPolygon = null;
         var drawingManager = null;
@@ -665,7 +668,23 @@
     ?>
     <div id="search-area" class="table-responsive respstyle">
         <div id="search-form">
-
+            <?php
+            if ($fields != NULL) {
+                foreach ($field_A as $key => $values) {
+                    ?>
+                    <select style="display: none" class="sr-formelement" name="<?= $key; ?>" id="">
+                        <?php
+                        foreach ($values as $sval) {
+                            ?>
+                            <option selected value="<?= $sval; ?>"><?= $sval ?></option>
+                            <?
+                        }
+                        ?>
+                    </select>
+                    <?
+                }
+            }
+            ?>
             <div class="row">
                 <div class="col-md-4 col-sm-4 ">
                     <label for="property-type">Type:</label>
