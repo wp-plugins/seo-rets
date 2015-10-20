@@ -93,8 +93,13 @@ if ($type == "simple"):?>
     echo iconv("UTF-8", "ISO-8859-1//TRANSLIT", str_replace($search, $replace, html_entity_decode($content, ENT_COMPAT, 'UTF-8')));
 elseif ($type == "customform"):
     echo do_shortcode(get_option("sr_customform"));
-
-elseif ($type == "basicstyle"):
+elseif ($type == "script"):
+    wp_enqueue_script('sr_seorets-min');
+    wp_print_scripts(array('sr_seorets-min'));
+    ?>
+    <script type="text/javascript">seorets.options = {blogurl: "<?php echo get_bloginfo('url')?>"};</script>
+    <div></div>
+<?php elseif ($type == "basicstyle"):
     wp_enqueue_script('sr_seorets-min');
     wp_print_scripts(array('sr_seorets-min'));
     ?>
@@ -899,7 +904,9 @@ elseif ($type == "basicstyle"):
                     </div>
                 </div>
             </div>
-        <?php } ?>
+            <?php
+        }
+        ?>
         <?php if (isset($order[0]) && isset($order[1])): ?>
             <input type="hidden" class="sr-order" srfield="<?php echo $order[0] ?>"
                    srdirection="<?php echo $order[1] ?>"/>
@@ -1080,7 +1087,7 @@ elseif ($type == "basicstyle"):
                     </div>
                 </div>
 
-                <div id="sb_type" class="row disp-none margin-top-15">
+                <div class="row margin-top-15">
                     <div class="col-md-4 col-sm-4">
                         <label for="">Sub Type:</label>
                     </div>
@@ -1314,6 +1321,7 @@ elseif ($type == "basicstyle"):
         </div>
         <?php
         if ($this->show_features == "true") {
+
             ?>
             <div class="row margin-top-40">
                 <div class="col-md-3 col-sm-3">
@@ -1529,7 +1537,9 @@ elseif ($type == "basicstyle"):
                     </div>
                 </div>
             </div>
-        <?php } ?>
+            <?php
+        }
+        ?>
         <?php if (isset($order[0]) && isset($order[1])): ?>
             <input type="hidden" class="sr-order" srfield="<?php echo $order[0] ?>"
                    srdirection="<?php echo $order[1] ?>"/>

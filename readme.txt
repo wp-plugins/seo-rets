@@ -4,7 +4,7 @@ Donate link:
 Tags: RETS, IDX, SEORETS, Real estate, SEO
 Requires at least: 3.0.1
 Tested up to: 4.3
-Stable tag: 3.3.51
+Stable tag: 3.3.52
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,6 +46,10 @@ You can create page with market statistics with help of [sr-market] shortcode.
 3. Feed Information
 
 == Changelog ==
+= 3.3.52 =
+* Fix advanced search bug.
+
+
 = 3.3.51 =
 * Fix search bug.
 * Features switch on/off.
