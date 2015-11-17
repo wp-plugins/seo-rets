@@ -4,7 +4,7 @@ Donate link:
 Tags: RETS, IDX, SEORETS, Real estate, SEO
 Requires at least: 3.0.1
 Tested up to: 4.3
-Stable tag: 3.3.52
+Stable tag: 3.3.53
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,12 +29,11 @@ RETS stands for Real Estate Transaction Standards. RETS is a type of data feed p
 Yes.  SEORETS manages your RETS/IX feed by providing automated functions like pulling in and updating your MLS’ listings, providing search functions, search results, mapping, etc.  In order for SEORETS to do this you have to be a member of the MLS board of which you are wanting the RETS data from.  SEORETS functionality is dependent on your MLS having a FTP, IDX or RETS data feed and you having a membership to that MLS board.  Keep in mind that some MLS boards charge you a fee for this access.
 
 = Does SEORETS require any long term agreements or contracts? =
-No, SEORETS is a month to month agreement only.  With monthly plans starting at $49.99.
-What can I expect if I choose SEORETS as my  RETS/IDX feed provider?
+No, there are no long term contracts. What can I expect if I choose SEORETS as my  RETS/IDX feed provider?
 Upon installing the SEORETS plugin you will see a link to sign up for a license key.  This link takes you to a form to enter you details and subscription payment method.  Upon receiving the sign up SEORETS, LLC will send you the necessary MLS paperwork (If required).  Once you sign the MLS paperwork you will need to fax or email it back to us and we will forward the paperwork to the MLS for approval.  Approval can take between 2-10 days on average.  Once approved we will send you a license key to activate the plugin.
 
 = How to add auto-generated area page ? =
-You can add auto-generated area page with help of [sr-list type="res" object="subdivision"] or [sr-list type="res" object="subdivision"].
+You can add auto-generated area page with help of [sr-list type="res" object="subdivision"] or [sr-list type="res" object="city"].
 
 = How can I create page with market statistics ? =
 You can create page with market statistics with help of [sr-market] shortcode.
@@ -46,9 +45,11 @@ You can create page with market statistics with help of [sr-market] shortcode.
 3. Feed Information
 
 == Changelog ==
+= 3.3.53 =
+* Fix search widget bug.
+
 = 3.3.52 =
 * Fix advanced search bug.
-
 
 = 3.3.51 =
 * Fix search bug.

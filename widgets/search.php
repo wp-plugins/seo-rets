@@ -25,10 +25,14 @@ class SEO_Rets_Search_Widget extends WP_Widget {
 		
    ?>
 		<h3 class="widget-title"><?php echo isset($instance['title'])?$instance['title']:""?></h3>
+		  <?php  wp_enqueue_script('sr_seorets-min');
+    		     wp_print_scripts(array('sr_seorets-min'));
+    ?>
 		<script type="text/javascript">
 		(function(){
 			var m = (function(){var s=document.getElementsByTagName('script');return s[s.length-1];})();
 			jQuery(function(){
+			    seorets.options = {blogurl: "<?php echo get_bloginfo('url')?>"};
 				seorets.startForm(jQuery(m).nextUntil('.sr-formsection + *','.sr-formsection'));
 			});
 		})();</script>

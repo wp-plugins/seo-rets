@@ -601,7 +601,7 @@
                                         geocode: JSON.stringify(needs_geocoding)
                                     },
                                     success: function (response) {
-                                        console.log(response);
+//                                        console.log(response);
                                         if (response !== null) {
                                             var l = 0;
                                             for (l; l < response.geocode.length; l++) {

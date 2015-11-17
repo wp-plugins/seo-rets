@@ -3,7 +3,7 @@
 Plugin Name: SEO RETS
 Plugin URI: http://seorets.com
 Description: Convert your RETS/IDX feed into an SEO friendly real estate portal
-Version: 3.3.52
+Version: 3.3.53
 Author: SEO RETS, LLC
 Author URI: http://seorets.com
 */
@@ -277,7 +277,8 @@ $wp_rewrite->flush_rules();
         }
         wp_register_script('sr_seorets-min', $this->js_resources_dir . 'seorets.min.js');
         add_action('sr-template-redirect', array(__CLASS__, 'postFilterHook'));
-
+//
+//
     }
 
     public function postFilterHook()

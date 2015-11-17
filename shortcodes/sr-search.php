@@ -315,15 +315,16 @@ elseif ($type == "script"):
                                 type: jQuery(this).attr("srtype")
                             },
                             success: function (response) {
-                                console.log(response);
-                                jQuery("#cities").html(' ');
-                                i = 0;
-                                for (i; i <= response.length - 1; i++) {
-                                    if (i == 0) {
-                                        jQuery("<option value='' selected='selected'>Any</option>").appendTo("#cities");
-                                    }
+                                if (response) {
+                                    jQuery("#cities").html(' ');
+                                    i = 0;
+                                    for (i; i <= response.length - 1; i++) {
+                                        if (i == 0) {
+                                            jQuery("<option value='' selected='selected'>Any</option>").appendTo("#cities");
+                                        }
 
-                                    jQuery("<option>" + response[i] + "</option>").appendTo("#cities");
+                                        jQuery("<option>" + response[i] + "</option>").appendTo("#cities");
+                                    }
                                 }
                             }
                         });
@@ -334,15 +335,16 @@ elseif ($type == "script"):
                                 areas: jQuery(this).attr("srtype")
                             },
                             success: function (response) {
-                                console.log(response);
-                                jQuery("#area").html(' ');
-                                i = 0;
-                                for (i; i <= response.length - 1; i++) {
-                                    if (i == 0) {
-                                        jQuery("<option value='' selected='selected'>Any</option>").appendTo("#area");
-                                    }
+                                if (response) {
+                                    jQuery("#area").html(' ');
+                                    i = 0;
+                                    for (i; i <= response.length - 1; i++) {
+                                        if (i == 0) {
+                                            jQuery("<option value='' selected='selected'>Any</option>").appendTo("#area");
+                                        }
 
-                                    jQuery("<option>" + response[i] + "</option>").appendTo("#area");
+                                        jQuery("<option>" + response[i] + "</option>").appendTo("#area");
+                                    }
                                 }
                             }
                         });
@@ -353,7 +355,6 @@ elseif ($type == "script"):
                                 subd: jQuery(this).attr("srtype")
                             },
                             success: function (response) {
-                                console.log(response);
                                 jQuery("#subdivision").html(' ');
                                 i = 0;
                                 if (response != null) {
@@ -378,21 +379,22 @@ elseif ($type == "script"):
                                 subt: jQuery(this).attr("srtype")
                             },
                             success: function (response) {
-                                console.log(response);
-                                jQuery("#sub_type").html(' ');
-                                i = 0;
-                                for (i; i <= response.length - 1; i++) {
-                                    if (response != null) {
-                                        jQuery("#sb_type").removeClass("disp-none");
-                                        if (i == 0) {
-                                            jQuery("<option value='' selected='selected'>Any</option>").appendTo("#sub_type");
+                                if (response) {
+                                    jQuery("#sub_type").html(' ');
+                                    i = 0;
+                                    for (i; i <= response.length - 1; i++) {
+                                        if (response != null) {
+                                            jQuery("#sb_type").removeClass("disp-none");
+                                            if (i == 0) {
+                                                jQuery("<option value='' selected='selected'>Any</option>").appendTo("#sub_type");
+                                            }
+
+                                            jQuery("<option>" + response[i] + "</option>").appendTo("#sub_type");
+                                        } else {
+                                            jQuery("#sb_type").addClass("disp-none");
                                         }
 
-                                        jQuery("<option>" + response[i] + "</option>").appendTo("#sub_type");
-                                    } else {
-                                        jQuery("#sb_type").addClass("disp-none");
                                     }
-
                                 }
                             }
                         });
@@ -940,15 +942,16 @@ elseif ($type == "script"):
                                 type: jQuery(this).attr("srtype")
                             },
                             success: function (response) {
-                                console.log(response);
-                                jQuery("#cities").html(' ');
-                                i = 0;
-                                for (i; i <= response.length - 1; i++) {
-                                    if (i == 0) {
-                                        jQuery("<option value='' selected='selected'>Any</option>").appendTo("#cities");
-                                    }
+                                if (response) {
+                                    jQuery("#cities").html(' ');
+                                    i = 0;
+                                    for (i; i <= response.length - 1; i++) {
+                                        if (i == 0) {
+                                            jQuery("<option value='' selected='selected'>Any</option>").appendTo("#cities");
+                                        }
 
-                                    jQuery("<option>" + response[i] + "</option>").appendTo("#cities");
+                                        jQuery("<option>" + response[i] + "</option>").appendTo("#cities");
+                                    }
                                 }
                             }
                         });
@@ -959,15 +962,16 @@ elseif ($type == "script"):
                                 areas: jQuery(this).attr("srtype")
                             },
                             success: function (response) {
-                                console.log(response);
-                                jQuery("#area").html(' ');
-                                i = 0;
-                                for (i; i <= response.length - 1; i++) {
-                                    if (i == 0) {
-                                        jQuery("<option value='' selected='selected'>Any</option>").appendTo("#area");
-                                    }
+                                if (response) {
+                                    jQuery("#area").html(' ');
+                                    i = 0;
+                                    for (i; i <= response.length - 1; i++) {
+                                        if (i == 0) {
+                                            jQuery("<option value='' selected='selected'>Any</option>").appendTo("#area");
+                                        }
 
-                                    jQuery("<option>" + response[i] + "</option>").appendTo("#area");
+                                        jQuery("<option>" + response[i] + "</option>").appendTo("#area");
+                                    }
                                 }
                             }
                         });
@@ -978,16 +982,17 @@ elseif ($type == "script"):
                                 subd: jQuery(this).attr("srtype")
                             },
                             success: function (response) {
-                                console.log(response);
-                                jQuery("#subdivision").html(' ');
-                                i = 0;
                                 if (response) {
-                                    for (i; i <= response.length - 1; i++) {
-                                        if (i == 0) {
-                                            jQuery("<option value='' selected='selected'>Any</option>").appendTo("#subdivision");
-                                        }
+                                    jQuery("#subdivision").html(' ');
+                                    i = 0;
+                                    if (response) {
+                                        for (i; i <= response.length - 1; i++) {
+                                            if (i == 0) {
+                                                jQuery("<option value='' selected='selected'>Any</option>").appendTo("#subdivision");
+                                            }
 
-                                        jQuery("<option>" + response[i] + "</option>").appendTo("#subdivision");
+                                            jQuery("<option>" + response[i] + "</option>").appendTo("#subdivision");
+                                        }
                                     }
                                 }
                             }
@@ -999,15 +1004,22 @@ elseif ($type == "script"):
                                 subt: jQuery(this).attr("srtype")
                             },
                             success: function (response) {
-                                console.log(response);
-                                jQuery("#sub_type").html(' ');
-                                i = 0;
-                                for (i; i <= response.length - 1; i++) {
-                                    if (i == 0) {
-                                        jQuery("<option value='' selected='selected'>Any</option>").appendTo("#sub_type");
-                                    }
+                                if (response) {
+                                    jQuery("#sub_type").html(' ');
+                                    i = 0;
+                                    for (i; i <= response.length - 1; i++) {
+                                        if (response != null) {
+                                            jQuery("#sb_type").removeClass("disp-none");
+                                            if (i == 0) {
+                                                jQuery("<option value='' selected='selected'>Any</option>").appendTo("#sub_type");
+                                            }
 
-                                    jQuery("<option>" + response[i] + "</option>").appendTo("#sub_type");
+                                            jQuery("<option>" + response[i] + "</option>").appendTo("#sub_type");
+                                        } else {
+                                            jQuery("#sb_type").addClass("disp-none");
+                                        }
+
+                                    }
                                 }
                             }
                         });
@@ -1018,12 +1030,13 @@ elseif ($type == "script"):
                                 subd: jQuery(this).attr("srtype")
                             },
                             success: function (response) {
-                                console.log(response);
-                                var show = false;
-                                if (response != null) {
-                                    jQuery("#subd-none").removeClass("disp-none");
-                                } else {
-                                    jQuery("#subd-none").addClass("disp-none");
+                                if (response) {
+                                    var show = false;
+                                    if (response != null) {
+                                        jQuery("#subd-none").removeClass("disp-none");
+                                    } else {
+                                        jQuery("#subd-none").addClass("disp-none");
+                                    }
                                 }
                             }
                         });
@@ -1087,7 +1100,7 @@ elseif ($type == "script"):
                     </div>
                 </div>
 
-                <div class="row margin-top-15">
+                <div id="sb_type" class="row disp-none margin-top-15">
                     <div class="col-md-4 col-sm-4">
                         <label for="">Sub Type:</label>
                     </div>

@@ -1,8 +1,6 @@
 <?php
-
 global $seo_rets_plugin;
 $sr = $seo_rets_plugin;
-
 $params = json_decode(base64_decode($_GET['params']), true);
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
